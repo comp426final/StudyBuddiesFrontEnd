@@ -2,9 +2,13 @@ import React from "react";
 // import axios from "axios";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Message(props) {
+function Announcement (props) {
   const content = (
-    <article className="message">
+    <article className="message is-dark">
+      <div className="message-header">
+        <p>Hello World</p>
+        <button className="delete" aria-label="delete"></button>
+      </div>
       <div className="message-body">
         {props.content}
       </div>
@@ -13,4 +17,4 @@ function Message(props) {
   return content;
 }
 
-export default Message;
+export default Announcement;

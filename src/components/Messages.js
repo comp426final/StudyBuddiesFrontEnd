@@ -9,18 +9,21 @@ function Messages (props) {
   const createMessage = message => {
     return (
       <Message
-       
+       key={message.id}
+       content={message.content}
+       user={message.user}
       />
     );
   };
 
   // Map the messages
   const createMessages = (messages) => {
+    console.log(messages);
     return messages.map(createMessage);
   };
 
     const content =  (
-    <div>
+    <div className="box content">
         <React.Fragment>
             {createMessages(props.messages)}
         </React.Fragment>

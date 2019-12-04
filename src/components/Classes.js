@@ -8,7 +8,7 @@ function Classes (props) {
   const createClass = _class => {
     return (
       <Class
-
+        key={_class.id}
       />
     );
   };
@@ -17,7 +17,6 @@ function Classes (props) {
   const createClasses = (classes) => {
     return classes.map(createClass);
   };
-
     const content =  (
     <div>
         <React.Fragment>

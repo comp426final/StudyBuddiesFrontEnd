@@ -1,31 +1,31 @@
 import React, {  } from "react";
-import Classmate from "./Classmate";
+import Announcement from "./Announcement";
 // import axios from "axios";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Classmates (props) {
+function Announcements (props) {
 
      // This function and the next function are used to transform the retrieved tweets into react components.
-  const createClassmate = classmate => {
+  const createAnnouncement = announcement => {
     return (
-      <Classmate
-
+      <Announcement
+        key={announcement.id}
       />
     );
   };
 
-  // Map the classmates
-  const createClassmates = (classmates) => {
-    return classmates.map(createClassmate);
+  // Map the announcements
+  const createAnnouncements = (Announcements) => {
+    return Announcements.map(createAnnouncement);
   };
   
     const content =  (
     <div>
         <React.Fragment>
-            {createClassmates(props.classmates)}
+            {createAnnouncements(props.announcements)}
         </React.Fragment>
     </div>);
     return content;
 }
 
-export default Classmates
+export default Announcements
