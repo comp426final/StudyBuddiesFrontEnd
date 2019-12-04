@@ -57,7 +57,6 @@ function App() {
             clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
             buttonText="Logout"
             onLogoutSuccess={logoutSuccess}
-            icon={false}
           />
         </footer>
       </section>
@@ -68,15 +67,15 @@ function App() {
         <div className="hero-body"></div>
       </section>
       <section className="section columns">
-        <div className="box column is-one-third is-offset-one-third">
+        <div className="box column is-offset-one-third is-one-third">
           <div className="content has-text-centered is-primary">
+            <h2 className="title">Welcome to Study Buddies!</h2>
             <GoogleLogin
               clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
               buttonText="Login"
               onSuccess={loginSuccess}
               onFailure={loginFail}
               cookiePolicy={"single_host_origin"}
-              icon={false}
             />
           </div>
         </div>
