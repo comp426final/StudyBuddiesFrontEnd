@@ -23,7 +23,7 @@ function Messages (props) {
   };
 
     const content =  (
-    <div className="box content">
+    <div className="section">
         <React.Fragment>
             {createMessages(props.messages)}
         </React.Fragment>

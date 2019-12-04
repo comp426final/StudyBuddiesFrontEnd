@@ -10,6 +10,7 @@ function Announcements (props) {
     return (
       <Announcement
         key={announcement.id}
+        content={announcement.content}
       />
     );
   };
@@ -20,7 +21,7 @@ function Announcements (props) {
   };
   
     const content =  (
-    <div>
+    <div className="section is-dark">
         <React.Fragment>
             {createAnnouncements(props.announcements)}
         </React.Fragment>

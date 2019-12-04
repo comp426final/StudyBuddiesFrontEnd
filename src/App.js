@@ -90,15 +90,15 @@ function App() {
         <section className="hero is-primary">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">Study Buddies</h1>
+              <h1 className="title"></h1>
               <h2 className="subtitle">
                 Welcome, {currentUser.givenName} {currentUser.familyName}!
               </h2>
             </div>
           </div>
         </section>
-        <section className="section has-text-centered">
-          <div className="columns">
+        <section className="section is-marginless is-paddingless">
+          <div className="columns is-gapless">
             <div className="column is-quarter">
               <React.Fragment>
                 <Classes classes={currentUser.classes} />
@@ -116,14 +116,31 @@ function App() {
             </div>
           </div>
         </section>
-        <section className="">
-          <footer className="footer">
-            <GoogleLogout
-              clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
-              buttonText="Logout"
-              onLogoutSuccess={logoutSuccess}
-            />
-          </footer>
+        <section className="section is-marginless is-paddingless">
+          <nav
+            className="navbar is-fixed-bottom"
+            role="navigation"
+            aria-label="main navigation"
+          >
+            <div className="navbar-brand">
+              <div className="navbar-item">
+                Study Buddies
+              </div>
+            </div>
+            <div className="navbar-menu">
+              <div className="navbar-end">
+                <div className="navbar-item">
+                  <React.Fragment>
+                    <GoogleLogout
+                      clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
+                      buttonText="Logout"
+                      onLogoutSuccess={logoutSuccess}
+                    />
+                  </React.Fragment>
+                </div>
+              </div>
+            </div>
+          </nav>
         </section>
       </div>
     ) : (
