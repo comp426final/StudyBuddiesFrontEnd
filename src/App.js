@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-// import {axios} from "axios";
 
 import "./css/styles.css";
 import Classes from "./components/Classes";
 import Messages from "./components/Messages";
 import Announcements from "./components/Announcements";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GoogleLogin } from "react-google-login";
 import { GoogleLogout } from "react-google-login";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -22,41 +21,10 @@ function App() {
     console.log(currentClass);
   }, [currentClass]);
 
-  // Google Login Callbacks
-  const loginRequest = () => {
-    setLoading(true);
-  };
-  const loginSuccess = response => {
-    response.profileObj.classes = [];
-    setUser(response.profileObj);
-    setLoggedIn(true);
-    setClass({
-      name: "placeholder",
-      messages: [
-        {
-          user: currentUser.givenName,
-          content: "test message",
-          id: 0
-        }
-      ],
-      announcements: [
-        {
-          user: currentUser.givenName,
-          content: "test announcement",
-          id: 0
-        }
-      ],
-      id: 0
-    });
-
-    setLoading(false);
-  };
-  const loginFail = response => {
-    console.log(response);
-  };
   const logoutSuccess = () => {
     setLoggedIn(false);
   };
+  
   // API requests
   //   async function getClasses() {
   //     const result = await axios({
@@ -123,9 +91,7 @@ function App() {
             aria-label="main navigation"
           >
             <div className="navbar-brand">
-              <div className="navbar-item">
-                Study Buddies
-              </div>
+              <div className="navbar-item">Study Buddies</div>
             </div>
             <div className="navbar-menu">
               <div className="navbar-end">
@@ -143,28 +109,16 @@ function App() {
           </nav>
         </section>
       </div>
-    ) : (
-      <div className="App">
-        <section className="hero is-primary">
-          <div className="hero-body"></div>
-        </section>
-        <section className="section columns">
-          <div className="box column is-offset-one-third is-one-third">
-            <div className="content has-text-centered is-primary">
-              <h2 className="title">Welcome to Study Buddies!</h2>
-              <GoogleLogin
-                clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
-                buttonText="Login"
-                onRequest={loginRequest}
-                onSuccess={loginSuccess}
-                onFailure={loginFail}
-                cookiePolicy={"single_host_origin"}
-              />
-            </div>
-          </div>
-        </section>
-      </div>
-    );
+    ) : ( 
+    <React.Fragment>
+      <LandingPage
+      setLoggedIn={setLoggedIn}
+      setLoading={setLoading}
+      setUser={setUser}
+      setClass={setClass}
+      currentUser={currentUser}
+      />
+    </React.Fragment>  )  
   }
   return content;
 }
