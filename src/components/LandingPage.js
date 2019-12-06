@@ -142,17 +142,13 @@ function LandingPage(props) {
     logIn();
   }
 
-  // API requests comp426-finalapi.herokuapp.com
+  // API requests comp426-finalapi.herokuapp.com localhost:3001
   async function checkUser(callback) {
     const result = await axios({
       method: "post",
-      url: `http://localhost:3001/account/checkUser`,
+      url: `http://comp426-finalapi.herokuapp.com/account/checkUser`,
       data: {
         name: username
-      },
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
       }
     });
     callback(result);
@@ -161,14 +157,10 @@ function LandingPage(props) {
   async function signUp() {
     const result = await axios({
       method: "post",
-      url: `http://localhost:3001/account/create`,
+      url: `http://comp426-finalapi.herokuapp.com/account/create`,
       data: {
         name: username,
         pass: password
-      },
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
       }
     });
   }
@@ -176,14 +168,10 @@ function LandingPage(props) {
   async function logIn() {
     const result = await axios({
       method: "post",
-      url: `http://localhost:3001/account/login`,
+      url: `http://comp426-finalapi.herokuapp.com/account/login`,
       data: {
         name: username,
         pass: password
-      },
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
       }
     });
     if (result.status === 200) {
