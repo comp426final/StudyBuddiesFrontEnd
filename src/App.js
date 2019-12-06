@@ -10,6 +10,7 @@ import LandingPage from "./components/LandingPage";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [googleUser, setGoogleUser] = useState(false);
   const [currentUser, setUser] = useState([]);
   const [currentClass, setClass] = useState("");
   const [loading, setLoading] = useState(false);
@@ -116,6 +117,7 @@ function App() {
       setLoading={setLoading}
       setUser={setUser}
       setClass={setClass}
+      setGoogleUser={setGoogleUser}
       currentUser={currentUser}
       />
     </React.Fragment>  )  
