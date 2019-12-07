@@ -97,13 +97,13 @@ function App() {
             <div className="navbar-menu">
               <div className="navbar-end">
                 <div className="navbar-item">
-                  <React.Fragment>
+                  {googleUser ? <React.Fragment>
                     <GoogleLogout
                       clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
                       buttonText="Logout"
                       onLogoutSuccess={logoutSuccess}
                     />
-                  </React.Fragment>
+                  </React.Fragment> : <button className="button">Logout</button>}
                 </div>
               </div>
             </div>
