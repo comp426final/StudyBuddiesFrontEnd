@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
+import { DebounceInput } from "react-debounce-input";
 import axios from "axios";
 
 // import {axios} from "axios";
@@ -58,7 +59,6 @@ function LandingPage(props) {
   const loginSuccess = response => {
     response.profileObj.classes = [];
     props.setUser(response.profileObj);
-    props.setLoggedIn(true);
     props.setClass({
       name: "placeholder",
       messages: [
@@ -90,6 +90,7 @@ function LandingPage(props) {
       }
     });
 
+    props.setLoggedIn(true);
     props.setLoading(false);
   };
   const loginFail = response => {
@@ -98,24 +99,6 @@ function LandingPage(props) {
 
   // Button handlers
   async function onSignUp() {
-    props.setClass({
-      name: "placeholder",
-      messages: [
-        {
-          user: props.currentUser.givenName,
-          content: "test message",
-          id: 0
-        }
-      ],
-      announcements: [
-        {
-          user: props.currentUser.givenName,
-          content: "test announcement",
-          id: 0
-        }
-      ],
-      id: 0
-    });
     await signUp();
     await logIn();
   }
@@ -223,11 +206,13 @@ function LandingPage(props) {
             <div className="field">
               <label className="label">Username</label>
               <div className="control has-icons-left has-icons-right">
-                <input
+                <DebounceInput
+                  minLength={1}
+                  debounceTimeout={300}
+                  onChange={onUsernameChange}
                   className={`input is-${validUser}`}
                   type="text"
                   placeholder="Username"
-                  onChange={onUsernameChange}
                 />
                 <span className="icon is-small is-left">
                   <React.Fragment>
@@ -240,20 +225,24 @@ function LandingPage(props) {
                   </React.Fragment>
                 </span>
               </div>
-              {validUser !== "danger" ? (
-                <div></div>
+              {validUser === "danger" ? (
+                <p className="help is-danger">Username already taken</p>
+              ) : validUser === "success" ? (
+                <p className="help is-success">Username is available</p>
               ) : (
-                <p className="help is-danger">User already exists</p>
+                <p />
               )}
             </div>
             <div className="field">
               <label className="label">Password</label>
               <div className="control has-icons-left has-icons-right">
-                <input
-                  className={`input is-${validPass}`}
-                  type="password"
-                  placeholder="Text input"
+                <DebounceInput
+                  minLength={1}
+                  debounceTimeout={300}
                   onChange={onPasswordChange}
+                  className={`input is-${validPass}`}
+                  type="text"
+                  placeholder="Password"
                 />
                 <span className="icon is-small is-left">
                   <React.Fragment>
