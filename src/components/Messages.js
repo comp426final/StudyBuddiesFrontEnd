@@ -18,7 +18,6 @@ function Messages (props) {
 
   // Map the messages
   const createMessages = (messages) => {
-    console.log(messages);
     return messages.map(createMessage);
   };
 

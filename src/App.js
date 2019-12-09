@@ -17,20 +17,16 @@ function App() {
   const [currentUser, setUser] = useState([]);
   const [currentClass, setClass] = useState("");
   const [currentToken, setToken] = useState("");
+  const root = "localhost:3001"
+  // comp426-finalapi.herokuapp.com localhost:3001
 
-  useEffect(() => {
-    // let classes = getClasses();
-    // setClass(classes[0]);
-    // getQuickClass(currentClass);
-    console.log(currentToken);
-  }, [currentClass]);
 
   const logoutSuccess = () => {
     setLoggedIn(false);
   };
   const logInCallback = props => {
-    setLoggedIn(true);
     setToken(props.jwt);
+    setLoggedIn(true);
     getClasses();
   };
 
@@ -38,7 +34,7 @@ function App() {
   async function getClasses() {
     const result = await axios({
       method: "get",
-      url: `https://comp426-finalapi.herokuapp.com/classes/`
+      url: `https://${root}/classes/`
     });
     console.log(result);
     return [];
@@ -108,7 +104,8 @@ function App() {
     ) : (
       <React.Fragment>
         <LandingPage
-          setLoggedIn={setLoggedIn}
+          root={root}
+          logInCallback={logInCallback}
           setUser={setUser}
           setGoogleUser={setGoogleUser}
         />

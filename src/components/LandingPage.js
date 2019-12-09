@@ -30,8 +30,20 @@ function LandingPage(props) {
   useEffect(() => {
     if (signUpMode) {
       if (username.length > 0) {
-        checkUser(result => {
+        checkUser(username, result => {
           if (result.status === 200) {
+            setValidUser("success");
+          } else {
+            setValidUser("danger");
+          }
+        });
+      } else if (username.length === 0) {
+        setValidUser("primary");
+      }
+    } else {
+      if (username.length > 0) {
+        checkUser(username, result => {
+          if (result.status !== 200) {
             setValidUser("success");
           } else {
             setValidUser("danger");
@@ -59,22 +71,18 @@ function LandingPage(props) {
   };
 
   const googleLoginSuccess = response => {
-    response.profileObj.classes = [];
-    props.setGoogleUser(true);
-
-    setUsername(response.googleId);
-    setPassword(response.googleId);
-
-    checkUser(result => {
-      if (result.status === 200) {
-        logIn();
+    const ID = response.googleId;
+    checkUser(ID, result => {
+      if (result.status !== 200) {
+        logIn(ID, ID);
       } else {
-        signUp();
-        logIn();
+        signUp(ID, ID, () => {
+          logIn(ID, ID);
+        });
       }
     });
 
-    props.setLoggedIn(true);
+    props.setGoogleUser(true);
     setLoading(false);
   };
 
@@ -84,56 +92,61 @@ function LandingPage(props) {
   };
 
   // Button handlers
-  async function onSignUp() {
+  function onSignUp() {
     setLoading(true);
-    signUp();
-    logIn();
+    signUp(username, password, () => {
+      logIn(username, password);
+    });
     setLoading(false);
   }
 
   function onLogIn() {
     setLoading(true);
-    logIn();
+    logIn(username, password);
     setLoading(false);
   }
 
   // API requests comp426-finalapi.herokuapp.com localhost:3001
-  async function checkUser(callback) {
-    if (username.length !== 0) {
-      const result = await axios({
-        method: "post",
-        url: `http://comp426-finalapi.herokuapp.com/account/checkUser`,
-        data: {
-          name: username
-        }
-      });
-      callback(result);
+  async function checkUser(name, callback) {
+    const response = await axios({
+      method: "post",
+      url: `http://${props.root}/account/checkUser`,
+      data: {
+        name: name
+      }
+    });
+    if (callback) {
+      callback(response);
     }
   }
 
-  async function signUp() {
-    const result = await axios({
+  async function signUp(name, pass, callback) {
+    const response = await axios({
       method: "post",
-      url: `http://comp426-finalapi.herokuapp.com/account/create`,
+      url: `http://${props.root}/account/create`,
       data: {
-        name: username,
-        pass: password
+        name: name,
+        pass: pass
       }
     });
+    if (callback) {
+      callback(response);
+    }
   }
 
-  async function logIn() {
-    const result = await axios({
+  async function logIn(name, pass, callback) {
+    const response = await axios({
       method: "post",
-      url: `http://comp426-finalapi.herokuapp.com/account/login`,
+      url: `http://${props.root}/account/login`,
       data: {
-        name: username,
-        pass: password
+        name: name,
+        pass: pass
       }
     });
-    if (result.status === 200) {
-      props.loginCallback(result);
+    if (callback) {
+      callback(response);
     }
+    props.logInCallback(response);
   }
 
   let content = loading ? (
@@ -159,14 +172,16 @@ function LandingPage(props) {
                 <li
                   onClick={() => {
                     setSignUpMode(true);
-                    checkUser(result => {
-                      console.log(result);
-                      if (result.status === 200) {
-                        setValidUser("success");
-                      } else {
-                        setValidUser("danger");
-                      }
-                    });
+                    if (username.length !== 0) {
+                      checkUser(username, result => {
+                        console.log(result);
+                        if (result.status === 200) {
+                          setValidUser("success");
+                        } else {
+                          setValidUser("danger");
+                        }
+                      });
+                    }
                   }}
                   className={`${signUpMode ? "is-active" : ""}`}
                 >
@@ -175,7 +190,16 @@ function LandingPage(props) {
                 <li
                   onClick={() => {
                     setSignUpMode(false);
-                    setValidUser("primary");
+                    if (username.length !== 0) {
+                      checkUser(username, result => {
+                        console.log(result);
+                        if (result.status !== 200) {
+                          setValidUser("success");
+                        } else {
+                          setValidUser("danger");
+                        }
+                      });
+                    }
                   }}
                   className={`${signUpMode ? "" : "is-active"}`}
                 >
@@ -199,13 +223,13 @@ function LandingPage(props) {
                     <FontAwesomeIcon icon="user" />
                   </React.Fragment>
                 </span>
-                <span className="icon is-small is-right">
+                <span className={`icon is-small is-right`}>
                   <React.Fragment>
-                    <FontAwesomeIcon icon="check" />
+                    <FontAwesomeIcon icon={`${validUser==="danger" ? "exclamation-triangle" : "check"}`} />
                   </React.Fragment>
                 </span>
               </div>
-              {validUser === "danger" ? (
+              {signUpMode && validUser === "danger" ? (
                 <p className="help is-danger">Username already taken</p>
               ) : validUser === "success" ? (
                 <p className="help is-success">Username is available</p>
@@ -221,17 +245,17 @@ function LandingPage(props) {
                   debounceTimeout={300}
                   onChange={onPasswordChange}
                   className={`input is-${validPass}`}
-                  type="text"
+                  type="password"
                   placeholder="Password"
                 />
-                <span className="icon is-small is-left">
+                <span className="icon is-small is-left ">
                   <React.Fragment>
                     <FontAwesomeIcon icon="lock" />
                   </React.Fragment>
                 </span>
-                <span className="icon is-small is-right">
+                <span className={`icon is-small is-right`}>
                   <React.Fragment>
-                    <FontAwesomeIcon icon="check" />
+                    <FontAwesomeIcon icon={`${validPass==="danger" ? "exclamation-triangle" : "check"}`} />
                   </React.Fragment>
                 </span>
               </div>
@@ -245,18 +269,22 @@ function LandingPage(props) {
             </div>
           </div>
 
-          <nav className="level">
-            {signUpMode ? (
+          {signUpMode ? (
+            <nav className="level">
               <div className="level-left">
-                <div className="field is-grouped">
+                <div className="field">
                   <button className="button level-item" onClick={onSignUp}>
                     Sign up
                   </button>
+                </div>
+              </div>
+              <div className="level-right">
+                <div className="field">
                   <GoogleLogin
                     clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
                     render={renderProps => (
                       <button
-                        className="button"
+                        className="button level-item"
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
                       >
@@ -269,18 +297,24 @@ function LandingPage(props) {
                     cookiePolicy={"single_host_origin"}
                   />
                 </div>
-              </div>
-            ) : (
-              <div className="level-right">
-                <div className="field is-grouped">
+              </div>{" "}
+            </nav>
+          ) : (
+            <nav className="level">
+              <div className="level-left">
+                <div className="field">
                   <button className="button level-item" onClick={onLogIn}>
                     Log in
                   </button>
+                </div>
+              </div>
+              <div className="level-right">
+                <div className="field">
                   <GoogleLogin
                     clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
                     render={renderProps => (
                       <button
-                        className="button"
+                        className="button level-item"
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
                       >
@@ -294,8 +328,8 @@ function LandingPage(props) {
                   />
                 </div>
               </div>
-            )}
-          </nav>
+            </nav>
+          )}
         </div>
       </section>
     </div>
