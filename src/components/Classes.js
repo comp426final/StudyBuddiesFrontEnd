@@ -1,29 +1,41 @@
-import React, {  } from "react";
-import Class from "./Class"
+import React from "react";
+import Class from "./Class";
 // import axios from "axios";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Classes (props) {
-     // This function and the next function are used to transform the retrieved tweets into react components.
+function Classes(props) {
+  // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
-    return (
-      <Class
-        key={_class.id}
-      />
-    );
+    return <Class key={_class.id} />;
   };
 
   // Map the classes
-  const createClasses = (classes) => {
+  const createClasses = classes => {
     return classes.map(createClass);
   };
-    const content =  (
-    <div>
-        <React.Fragment>
-            {createClasses(props.classes)}
-        </React.Fragment>
-    </div>);
-    return content;
+  const content = (
+    <div className="section is-dark">
+      <article className="panel is-primary content">
+        <p className="panel-heading">Classes</p>
+        <p className="panel-tabs">
+          <a className="is-active">Joined</a>
+          <a>Search</a>
+        </p>
+        <div className="panel-block">
+          <p className="control has-icons-left">
+            <input className="input is-primary" type="text" placeholder="Search" />
+            <span className="icon is-left">
+              <React.Fragment>
+                <FontAwesomeIcon icon="search" />
+              </React.Fragment>{" "}
+            </span>
+          </p>
+        </div>
+        <React.Fragment>{createClasses(props.classes)}</React.Fragment>
+      </article>
+    </div>
+  );
+  return content;
 }
 
-export default Classes
+export default Classes;

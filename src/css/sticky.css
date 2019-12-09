@@ -1,0 +1,6 @@
+.edit-message{
+    z-index: 3;
+    position: -webkit-sticky;
+  position: sticky;
+  bottom: 1rem;
+  }

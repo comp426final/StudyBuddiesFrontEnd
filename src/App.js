@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import "./css/sticky.css";
 import "./css/styles.css";
 import Classes from "./components/Classes";
 import Messages from "./components/Messages";
@@ -7,54 +8,43 @@ import Announcements from "./components/Announcements";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GoogleLogout } from "react-google-login";
 import LandingPage from "./components/LandingPage";
+import EditMessage from "./components/EditMessage";
+import axios from "axios";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [googleUser, setGoogleUser] = useState(false);
   const [currentUser, setUser] = useState([]);
   const [currentClass, setClass] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [currentToken, setToken] = useState("");
 
   useEffect(() => {
     // let classes = getClasses();
     // setClass(classes[0]);
     // getQuickClass(currentClass);
-    console.log(currentClass);
+    console.log(currentToken);
   }, [currentClass]);
 
   const logoutSuccess = () => {
     setLoggedIn(false);
   };
-  
-  // API requests
-  //   async function getClasses() {
-  //     const result = await axios({
-  //       method: "get",
-  //       url: `https://comp426-finalapi.herokuapp.com/classes/${currentUser.googleId}`,
-  //     });
-  //     console.log(result);
-  //     return [];
-  //  }
+  const logInCallback = props => {
+    setLoggedIn(true);
+    setToken(props.jwt);
+    getClasses();
+  };
 
-  //  async function getQuickClass() {
-  //   const result = await axios({
-  //     method: "get",
-  //     url: `https://comp426-finalapi.herokuapp.com/${currentClass}`,
-  //   });
-  //   console.log(result);
-  //   return [];
-  //  }
-  let content;
-  if (loading) {
-    content = (
-      <div className="App">
-        <section className="hero is-primary">
-          <div className="hero-body"></div>
-        </section>
-      </div>
-    );
-  } else {
-    content = loggedIn ? (
+  // API requests
+  async function getClasses() {
+    const result = await axios({
+      method: "get",
+      url: `https://comp426-finalapi.herokuapp.com/classes/`
+    });
+    console.log(result);
+    return [];
+  }
+
+  let content = loggedIn ? (
       <div className="App">
         <section className="hero is-primary">
           <div className="hero-body">
@@ -76,6 +66,7 @@ function App() {
             <div className="column is-half">
               <React.Fragment>
                 <Messages messages={currentClass.messages} />
+                <EditMessage content={"Send a message!"} />
               </React.Fragment>
             </div>
             <div className="column is-quarter">
@@ -97,31 +88,33 @@ function App() {
             <div className="navbar-menu">
               <div className="navbar-end">
                 <div className="navbar-item">
-                  {googleUser ? <React.Fragment>
-                    <GoogleLogout
-                      clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
-                      buttonText="Logout"
-                      onLogoutSuccess={logoutSuccess}
-                    />
-                  </React.Fragment> : <button className="button">Logout</button>}
+                  {googleUser ? (
+                    <React.Fragment>
+                      <GoogleLogout
+                        clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
+                        buttonText="Logout"
+                        onLogoutSuccess={logoutSuccess}
+                      />
+                    </React.Fragment>
+                  ) : (
+                    <button className="button">Logout</button>
+                  )}
                 </div>
               </div>
             </div>
           </nav>
         </section>
       </div>
-    ) : ( 
-    <React.Fragment>
-      <LandingPage
-      setLoggedIn={setLoggedIn}
-      setLoading={setLoading}
-      setUser={setUser}
-      setClass={setClass}
-      setGoogleUser={setGoogleUser}
-      currentUser={currentUser}
-      />
-    </React.Fragment>  )  
-  }
+    ) : (
+      <React.Fragment>
+        <LandingPage
+          setLoggedIn={setLoggedIn}
+          setUser={setUser}
+          setGoogleUser={setGoogleUser}
+        />
+      </React.Fragment>
+    );
+  
   return content;
 }
 
