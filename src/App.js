@@ -16,115 +16,92 @@ function App() {
   const [googleUser, setGoogleUser] = useState(false);
   const [currentUser, setUser] = useState([]);
   const [currentClass, setClass] = useState("");
-  const [currentToken, setToken] = useState("");
-  const root = "comp426-finalapi.herokuapp.com"
+  const [currentToken, setCurrentToken] = useState("");
+  const root = "comp426-finalapi.herokuapp.com";
   // comp426-finalapi.herokuapp.com localhost:3001
-
 
   const googleLogoutSuccess = () => {
     setLoggedIn(false);
   };
 
   const logInCallback = props => {
-    console.log(props.data)
-    setToken(props.data.jwt);
-    setUser(props.userData)
-    getClasses(result => {
-      console.log("classes = got");
-      console.log(result);
-      setLoggedIn(true);
-    });
-
+    console.log(props.data.data);
+    setUser(props.data.data);
+    setLoggedIn(true);
   };
 
   // API requests
-  async function getClasses(callback) {
-    // const result = await axios({
-    //   method: "get",
-    //   url: `https://${root}/public/classes`,
-    //   headers: {
-    //     "Authorization": `Bearer ${currentToken}`
-    //   }
-    // });
-    if ( callback ) {
-      callback([]);
-    };
-    return [];
-  }
 
   let content = loggedIn ? (
-      <div className="App">
-        <section className="hero is-primary">
-          <div className="hero-body">
-            <div className="container">
-              <h1 className="title"></h1>
-              <h2 className="subtitle">
-                Welcome!
-              </h2>
-            </div>
+    <div className="App">
+      <section className="hero is-primary">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title"></h1>
+            <h2 className="subtitle">Welcome!</h2>
           </div>
-        </section>
-        <section className="section is-marginless is-paddingless">
-          <div className="columns is-gapless">
-            <div className="column is-quarter">
-              <React.Fragment>
-                <Classes classes={currentUser.classes} />
-              </React.Fragment>
-            </div>
-            <div className="column is-half">
-              <React.Fragment>
-                <Messages messages={currentClass.messages} />
-                <EditMessage content={"Send a message!"} />
-              </React.Fragment>
-            </div>
-            <div className="column is-quarter">
-              <React.Fragment>
-                <Announcements announcements={currentClass.announcements} />
-              </React.Fragment>
-            </div>
+        </div>
+      </section>
+      <section className="section is-marginless is-paddingless">
+        <div className="columns is-gapless">
+          <div className="column is-quarter">
+            <React.Fragment>
+              <Classes classes={[]} />
+            </React.Fragment>
           </div>
-        </section>
-        <section className="section is-marginless is-paddingless">
-          <nav
-            className="navbar is-fixed-bottom"
-            role="navigation"
-            aria-label="main navigation"
-          >
-            <div className="navbar-brand">
-              <div className="navbar-item">Study Buddies</div>
-            </div>
-            <div className="navbar-menu">
-              <div className="navbar-end">
-                <div className="navbar-item">
-                  {googleUser ? (
-                    <React.Fragment>
-                      <GoogleLogout
-                        clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
-                        buttonText="Logout"
-                        onLogoutSuccess={googleLogoutSuccess
-                    }
-                      />
-                    </React.Fragment>
-                  ) : (
-                    <button className="button">Logout</button>
-                  )}
-                </div>
+          <div className="column is-half">
+            <React.Fragment>
+              <Messages messages={[]} />
+              <EditMessage content={"Send a message!"} />
+            </React.Fragment>
+          </div>
+          <div className="column is-quarter">
+            <React.Fragment>
+              <Announcements announcements={[]} />
+            </React.Fragment>
+          </div>
+        </div>
+      </section>
+      <section className="section is-marginless is-paddingless">
+        <nav
+          className="navbar is-fixed-bottom"
+          role="navigation"
+          aria-label="main navigation"
+        >
+          <div className="navbar-brand">
+            <div className="navbar-item">Study Buddies</div>
+          </div>
+          <div className="navbar-menu">
+            <div className="navbar-end">
+              <div className="navbar-item">
+                {googleUser ? (
+                  <React.Fragment>
+                    <GoogleLogout
+                      clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
+                      buttonText="Logout"
+                      onLogoutSuccess={googleLogoutSuccess}
+                    />
+                  </React.Fragment>
+                ) : (
+                  <button className="button">Logout</button>
+                )}
               </div>
             </div>
-          </nav>
-        </section>
-      </div>
-    ) : (
-      <React.Fragment>
-        <LandingPage
-          root={root}
-          logInCallback={logInCallback}
-          setUser={setUser}
-          setGoogleUser={setGoogleUser}
-        />
-      </React.Fragment>
-    );
-  
+          </div>
+        </nav>
+      </section>
+    </div>
+  ) : (
+    <React.Fragment>
+      <LandingPage
+        root={root}
+        logInCallback={logInCallback}
+        setUser={setUser}
+        setGoogleUser={setGoogleUser}
+      />
+    </React.Fragment>
+  );
+
   return content;
 }
 
