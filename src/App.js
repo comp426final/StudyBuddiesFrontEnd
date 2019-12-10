@@ -17,26 +17,37 @@ function App() {
   const [currentUser, setUser] = useState([]);
   const [currentClass, setClass] = useState("");
   const [currentToken, setToken] = useState("");
-  const root = "localhost:3001"
+  const root = "comp426-finalapi.herokuapp.com"
   // comp426-finalapi.herokuapp.com localhost:3001
 
 
-  const logoutSuccess = () => {
+  const googleLogoutSuccess = () => {
     setLoggedIn(false);
   };
+
   const logInCallback = props => {
-    setToken(props.jwt);
-    setLoggedIn(true);
-    getClasses();
+    console.log(props.data.jwt)
+    setToken(props.data.jwt);
+    getClasses(result => {
+      console.log("classes = got");
+      console.log(result);
+      setLoggedIn(true);
+    });
+
   };
 
   // API requests
-  async function getClasses() {
-    const result = await axios({
-      method: "get",
-      url: `https://${root}/classes/`
-    });
-    console.log(result);
+  async function getClasses(callback) {
+    // const result = await axios({
+    //   method: "get",
+    //   url: `https://${root}/public/classes`,
+    //   headers: {
+    //     "Authorization": `Bearer ${currentToken}`
+    //   }
+    // });
+    if ( callback ) {
+      callback([]);
+    };
     return [];
   }
 
@@ -89,7 +100,8 @@ function App() {
                       <GoogleLogout
                         clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
                         buttonText="Logout"
-                        onLogoutSuccess={logoutSuccess}
+                        onLogoutSuccess={googleLogoutSuccess
+                    }
                       />
                     </React.Fragment>
                   ) : (

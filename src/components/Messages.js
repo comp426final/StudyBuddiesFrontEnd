@@ -18,7 +18,9 @@ function Messages (props) {
 
   // Map the messages
   const createMessages = (messages) => {
+    if ( messages ) {
     return messages.map(createMessage);
+    } else { return; }
   };
 
     const content =  (

@@ -11,7 +11,9 @@ function Classes(props) {
 
   // Map the classes
   const createClasses = classes => {
-    return classes.map(createClass);
+    if ( classes ) {
+      return classes.map(createClass);
+    } else { return };
   };
   const content = (
     <div className="section is-dark">

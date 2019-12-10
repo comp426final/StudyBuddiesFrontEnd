@@ -16,8 +16,10 @@ function Announcements (props) {
   };
 
   // Map the announcements
-  const createAnnouncements = (Announcements) => {
-    return Announcements.map(createAnnouncement);
+  const createAnnouncements = (announcements) => {
+    if ( announcements ) {
+    return announcements.map(createAnnouncement);
+    } else { return }
   };
   
     const content =  (
