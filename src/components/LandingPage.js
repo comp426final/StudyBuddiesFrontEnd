@@ -128,11 +128,13 @@ function LandingPage(props) {
       data: {
         name: name,
         pass: pass,
-        userData: {
+        data: {
           classes: []
         }
       }
     });
+
+    console.log(response);
     if (callback) {
       callback(response);
     }
