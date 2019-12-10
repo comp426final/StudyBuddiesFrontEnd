@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 import "./css/sticky.css";
 import "./css/styles.css";
@@ -39,13 +41,13 @@ function App() {
 
   // API requests
   async function getClasses(callback) {
-    // const result = await axios({
-    //   method: "get",
-    //   url: `https://${root}/public/classes`,
-    //   headers: {
-    //     "Authorization": `Bearer ${currentToken}`
-    //   }
-    // });
+    const result = await axios({
+      method: "get",
+      url: `https://${root}/public/classes`,
+      headers: {
+        "Authorization": `Bearer ${currentToken}`
+      }
+    });
     if ( callback ) {
       callback([]);
     };
@@ -68,18 +70,18 @@ function App() {
           <div className="columns is-gapless">
             <div className="column is-quarter">
               <React.Fragment>
-                <Classes classes={currentUser.classes} />
+                <Classes classes={[]} />
               </React.Fragment>
             </div>
             <div className="column is-half">
               <React.Fragment>
-                <Messages messages={currentClass.messages} />
+                <Messages messages={[]} />
                 <EditMessage content={"Send a message!"} />
               </React.Fragment>
             </div>
             <div className="column is-quarter">
               <React.Fragment>
-                <Announcements announcements={currentClass.announcements} />
+                <Announcements announcements={[]} />
               </React.Fragment>
             </div>
           </div>
@@ -101,8 +103,7 @@ function App() {
                       <GoogleLogout
                         clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
                         buttonText="Logout"
-                        onLogoutSuccess={googleLogoutSuccess
-                    }
+                        onLogoutSuccess={googleLogoutSuccess}
                       />
                     </React.Fragment>
                   ) : (
