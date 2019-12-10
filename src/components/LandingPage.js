@@ -116,6 +116,7 @@ function LandingPage(props) {
       }
     });
     if (callback) {
+      
       callback(response);
     }
   }
@@ -126,7 +127,10 @@ function LandingPage(props) {
       url: `http://${props.root}/account/create`,
       data: {
         name: name,
-        pass: pass
+        pass: pass,
+        userData: {
+          classes: []
+        }
       }
     });
     if (callback) {

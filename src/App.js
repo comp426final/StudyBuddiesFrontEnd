@@ -26,8 +26,9 @@ function App() {
   };
 
   const logInCallback = props => {
-    console.log(props.data.jwt)
+    console.log(props.data)
     setToken(props.data.jwt);
+    setUser(props.userData)
     getClasses(result => {
       console.log("classes = got");
       console.log(result);
@@ -58,7 +59,7 @@ function App() {
             <div className="container">
               <h1 className="title"></h1>
               <h2 className="subtitle">
-                Welcome, {currentUser.givenName} {currentUser.familyName}!
+                Welcome!
               </h2>
             </div>
           </div>
