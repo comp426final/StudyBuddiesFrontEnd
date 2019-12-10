@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 import "./css/sticky.css";
 import "./css/styles.css";
@@ -33,22 +31,6 @@ function App() {
   };
 
   // API requests
-<<<<<<< HEAD
-  async function getClasses(callback) {
-    const result = await axios({
-      method: "get",
-      url: `https://${root}/public/classes`,
-      headers: {
-        "Authorization": `Bearer ${currentToken}`
-      }
-    });
-    if ( callback ) {
-      callback([]);
-    };
-    return [];
-  }
-=======
->>>>>>> bf368887b1b6754550b7343031a71a3ee9606ff5
 
   let content = loggedIn ? (
     <div className="App">
@@ -58,53 +40,6 @@ function App() {
             <h1 className="title"></h1>
             <h2 className="subtitle">Welcome!</h2>
           </div>
-<<<<<<< HEAD
-        </section>
-        <section className="section is-marginless is-paddingless">
-          <div className="columns is-gapless">
-            <div className="column is-quarter">
-              <React.Fragment>
-                <Classes classes={[]} />
-              </React.Fragment>
-            </div>
-            <div className="column is-half">
-              <React.Fragment>
-                <Messages messages={[]} />
-                <EditMessage content={"Send a message!"} />
-              </React.Fragment>
-            </div>
-            <div className="column is-quarter">
-              <React.Fragment>
-                <Announcements announcements={[]} />
-              </React.Fragment>
-            </div>
-          </div>
-        </section>
-        <section className="section is-marginless is-paddingless">
-          <nav
-            className="navbar is-fixed-bottom"
-            role="navigation"
-            aria-label="main navigation"
-          >
-            <div className="navbar-brand">
-              <div className="navbar-item">Study Buddies</div>
-            </div>
-            <div className="navbar-menu">
-              <div className="navbar-end">
-                <div className="navbar-item">
-                  {googleUser ? (
-                    <React.Fragment>
-                      <GoogleLogout
-                        clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
-                        buttonText="Logout"
-                        onLogoutSuccess={googleLogoutSuccess}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    <button className="button">Logout</button>
-                  )}
-                </div>
-=======
         </div>
       </section>
       <section className="section is-marginless is-paddingless">
@@ -150,7 +85,6 @@ function App() {
                 ) : (
                   <button className="button">Logout</button>
                 )}
->>>>>>> bf368887b1b6754550b7343031a71a3ee9606ff5
               </div>
             </div>
           </div>
