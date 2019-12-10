@@ -9,7 +9,6 @@ import axios from "axios";
 function LandingPage(props) {
   const [validPass, setValidPass] = useState("info");
   const [validUser, setValidUser] = useState("info");
-  const [loading, setLoading] = useState(false);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +66,7 @@ function LandingPage(props) {
 
   // Google Login Callbacks
   const googleLoginRequest = () => {
-    setLoading(true);
+    props.setLoading(true);
   };
 
   const googleLoginSuccess = response => {
@@ -83,27 +82,27 @@ function LandingPage(props) {
     });
 
     props.setGoogleUser(true);
-    setLoading(false);
+    props.setLoading(false);
   };
 
   const googleLoginFail = response => {
-    setLoading(false);
+    props.setLoading(false);
     console.log(response);
   };
 
   // Button handlers
   function onSignUp() {
-    setLoading(true);
+    props.setLoading(true);
     signUp(username, password, () => {
       logIn(username, password);
     });
-    setLoading(false);
+    props.setLoading(false);
   }
 
   function onLogIn() {
-    setLoading(true);
+    props.setLoading(true);
     logIn(username, password);
-    setLoading(false);
+    props.setLoading(false);
   }
 
   // API requests comp426-finalapi.herokuapp.com localhost:3001
@@ -116,7 +115,6 @@ function LandingPage(props) {
       }
     });
     if (callback) {
-      
       callback(response);
     }
   }
@@ -155,13 +153,7 @@ function LandingPage(props) {
     props.logInCallback(response);
   }
 
-  let content = loading ? (
-    <div className="App">
-      <section className="hero is-primary">
-        <div className="hero-body"></div>
-      </section>
-    </div>
-  ) : (
+  let content = (
     <div className="App">
       <section className="hero is-primary">
         <div className="hero-body"></div>
@@ -231,7 +223,13 @@ function LandingPage(props) {
                 </span>
                 <span className={`icon is-small is-right`}>
                   <React.Fragment>
-                    <FontAwesomeIcon icon={`${validUser==="danger" ? "exclamation-triangle" : "check"}`} />
+                    <FontAwesomeIcon
+                      icon={`${
+                        validUser === "danger"
+                          ? "exclamation-triangle"
+                          : "check"
+                      }`}
+                    />
                   </React.Fragment>
                 </span>
               </div>
@@ -261,7 +259,13 @@ function LandingPage(props) {
                 </span>
                 <span className={`icon is-small is-right`}>
                   <React.Fragment>
-                    <FontAwesomeIcon icon={`${validPass==="danger" ? "exclamation-triangle" : "check"}`} />
+                    <FontAwesomeIcon
+                      icon={`${
+                        validPass === "danger"
+                          ? "exclamation-triangle"
+                          : "check"
+                      }`}
+                    />
                   </React.Fragment>
                 </span>
               </div>

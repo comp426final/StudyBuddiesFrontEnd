@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import "./css/sticky.css";
 import "./css/styles.css";
@@ -9,30 +9,53 @@ import Announcements from "./components/Announcements";
 import { GoogleLogout } from "react-google-login";
 import LandingPage from "./components/LandingPage";
 import EditMessage from "./components/EditMessage";
+
 import axios from "axios";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [googleUser, setGoogleUser] = useState(false);
   const [currentUser, setUser] = useState([]);
   const [currentClass, setClass] = useState("");
   const [currentToken, setCurrentToken] = useState("");
+
   const root = "comp426-finalapi.herokuapp.com";
   // comp426-finalapi.herokuapp.com localhost:3001
 
+  //Login callbacks
   const googleLogoutSuccess = () => {
     setLoggedIn(false);
   };
 
   const logInCallback = props => {
-    console.log(props.data.data);
     setUser(props.data.data);
     setLoggedIn(true);
+    setLoading(false);
   };
 
   // API requests
+  async function loadAllClasses() {
+    const response = await axios({
+      method: "get",
+      url: `http://${root}/public/classes`,
+    });
+    console.log(response);
+    return response;
+  }
 
-  let content = loggedIn ? (
+  // Helper functions
+  function loadUserClasses() {
+    return currentUser.classes
+  }
+
+  let content = loading ? (
+    <div className="App">
+      <section className="hero is-primary">
+        <div className="hero-body"></div>
+      </section>
+    </div>
+  ) : loggedIn ? (
     <div className="App">
       <section className="hero is-primary">
         <div className="hero-body">
@@ -46,7 +69,7 @@ function App() {
         <div className="columns is-gapless">
           <div className="column is-quarter">
             <React.Fragment>
-              <Classes classes={[]} />
+              <Classes loadAllClasses={loadAllClasses} loadUserClasses={loadUserClasses} root={root} />
             </React.Fragment>
           </div>
           <div className="column is-half">
@@ -94,6 +117,8 @@ function App() {
   ) : (
     <React.Fragment>
       <LandingPage
+        loading={loading}
+        setLoading={setLoading}
         root={root}
         logInCallback={logInCallback}
         setUser={setUser}

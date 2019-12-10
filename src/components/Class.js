@@ -2,13 +2,13 @@ import React, {  } from "react";
 // import axios from "axios";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Class () {
+function Class (props) {
     const content =  (
       <a class="panel-block">
       <span class="panel-icon">
         <i class="fas fa-book" aria-hidden="true"></i>
       </span>
-      minireset.css
+      {props.class.name}
     </a>);
     return content;
 }
