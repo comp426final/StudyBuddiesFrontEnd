@@ -8,6 +8,8 @@ import {Provider} from 'react-redux'
 import reduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import {createStore, applyMiddleware} from 'redux';
+import * as serviceWorker from './serviceWorker';
+
 
 
 library.add(faUser);
@@ -30,7 +32,7 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
-
+serviceWorker.register();
 // ReactDOM.render(<App />, document.getElementById('root'));
 
 

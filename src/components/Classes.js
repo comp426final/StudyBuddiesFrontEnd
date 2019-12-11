@@ -116,7 +116,7 @@ function Classes(props) {
     </div>
   ) : (
     <div className="section is-dark">
-      <article className="panel is-primary content">
+      <article className="panel is-info content">
         <div className="panel-heading level">
           <div className="level-left">
             <p className="level-item">Classes</p>
