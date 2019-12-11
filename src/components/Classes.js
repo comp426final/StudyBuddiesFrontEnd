@@ -123,7 +123,7 @@ function Classes(props) {
         <div className="panel-block">
           <p className="control has-icons-left">
             <input
-              className="input is-primary"
+              className="input is-info"
               type="text"
               placeholder="Search"
             />
