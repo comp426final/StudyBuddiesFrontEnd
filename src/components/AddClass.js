@@ -23,6 +23,26 @@ function AddClass(props) {
     }
   }
 
+  async function addClass(name, dep, description, callback) {
+    const response = await axios({
+      method: "post",
+      url: `http://${props.root}/public/classes/${name}`,
+      data: {
+        data: {
+          name: name,
+          dep: dep,
+          description:
+          description,
+          messages: [],
+          members: []
+        }
+      }
+    });
+    if (callback) {
+      callback(response);
+    }
+  }
+
   // Change handlers
   const nameHandler = event => {
     const val = event.target.value;
@@ -46,6 +66,12 @@ function AddClass(props) {
   const departmentHandler = event => {
     const val = event.target.value;
     setDepartment(val);
+  };
+
+  const onSubmitHandler = () => {
+    addClass(name, department, description, response => {
+      props.setEditing(false);
+    });
   };
 
   const content = (
@@ -96,7 +122,9 @@ function AddClass(props) {
 
           <div className="field">
             <p className="control">
-              <button className="button">Create</button>
+              <button className="button" onClick={onSubmitHandler}>
+                Create
+              </button>
             </p>
           </div>
         </div>

@@ -1,16 +1,19 @@
-import React, {  } from "react";
-// import axios from "axios";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Class (props) {
-    const content =  (
-      <a class="panel-block">
-      <span class="panel-icon">
-        <i class="fas fa-book" aria-hidden="true"></i>
-      </span>
-      {props.class.name}
-    </a>);
-    return content;
+function Class(props) {
+  console.log(props.class);
+  const content = (
+    <div className="panel-block" onClick={props.setClass}>
+        <a className="panel-icon">
+          <React.Fragment>
+            <FontAwesomeIcon icon="book"  />
+          </React.Fragment>
+        </a>
+        {props.class.name}
+    </div>
+  );
+  return content;
 }
 
-export default Class
+export default Class;

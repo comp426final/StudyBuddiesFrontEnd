@@ -1,8 +1,48 @@
-import React from "react";
-// import axios from "axios";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 
 function EditMessage(props) {
+  const [message, setMessage] = useState("");
+
+  // Helper Functions and API requests
+  function msgHelper(event) {
+    const val = event.target.value;
+    setMessage(val);
+  }
+
+  function onSubmitHandler() {
+    addMessage(
+      props.currentClass.name,
+      props.currentUser.name,
+      message,
+      response => {
+        console.log(response);
+      }
+    );
+  }
+
+  async function addMessage(_class, author, content, callback) {
+    const response = await axios({
+      method: "post",
+      url: `http://${props.root}/public/classes/${_class}`,
+      data: {
+        type: "merge",
+        data: {
+          messages: [
+            {
+              author: author,
+              content: content
+            }
+          ]
+        }
+      }
+    });
+    if (callback) {
+      callback(response);
+    }
+  }
+
   const content = (
     <div className="field is-grouped edit-message">
       <p className="control is-expanded">
@@ -13,11 +53,15 @@ function EditMessage(props) {
         />
       </p>
       <p className="control">
-        <a className="button is-primary">
+        <button
+          className="button is-primary"
+          onChange={msgHelper}
+          onClick={onSubmitHandler}
+        >
           <React.Fragment>
             <FontAwesomeIcon icon="paper-plane" />
           </React.Fragment>
-        </a>
+        </button>
       </p>
     </div>
   );

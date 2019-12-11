@@ -30,19 +30,36 @@ function App() {
 
   const logInCallback = props => {
     setUser(props.data.data);
+    if ( props.data.data.classes[0] ) {
+      setClass(props.data.data.classes[0]);
+    }
     setLoggedIn(true);
     setLoading(false);
   };
 
   // API requests
-  async function loadAllClasses() {
+  async function loadAllClasses(callback) {
     const response = await axios({
       method: "get",
       url: `http://${root}/public/classes`,
     });
-    console.log(response);
-    return response;
+    callback(response.data.result);
   }
+  async function joinClass(name, _class, callback) {
+    const response = await axios({
+      method: "put",
+      url: `http://${root}/public/classes`,
+      data: {
+        type: 'merge',
+        data: {
+          
+        }
+      }
+    });
+    callback(response.data.result);
+  }
+
+
 
   // Helper functions
   function loadUserClasses() {
@@ -69,7 +86,7 @@ function App() {
         <div className="columns is-gapless">
           <div className="column is-quarter">
             <React.Fragment>
-              <Classes loadAllClasses={loadAllClasses} loadUserClasses={loadUserClasses} root={root} />
+              <Classes loadAllClasses={loadAllClasses} loadUserClasses={loadUserClasses} root={root} setClass={setClass} currentClass={currentClass} currentUser={currentUser}/>
             </React.Fragment>
           </div>
           <div className="column is-half">

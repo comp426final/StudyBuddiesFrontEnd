@@ -5,14 +5,13 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Classes(props) {
-
   const [joined, setJoined] = useState(true);
   const [classes, setClasses] = useState([]);
   const [editing, setEditing] = useState(false);
 
   // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
-    return <Class key={props.classes.indexOf(_class)} class={_class} />;
+    return <Class key={classes.indexOf(_class)} class={_class} setClass={props.setClass} joinClass={joinClass}/>;
   };
 
   // Map the classes
@@ -31,36 +30,35 @@ function Classes(props) {
   };
 
   // Helper functions and handlers
-  function panelHelper( classes, state) {
+  function loadAllClassesCallback(result) {
+    console.log(result);
+    let val = [];
+    var keys = Object.keys(result);
+    keys.forEach(function(key){
+        val.push(result[key]);
+    });
+    console.log(val);
+    setClasses(val);
+  }
+
+  function panelHelper(classes, state) {
     setClasses(classes);
     setJoined(state);
   }
-  
-  function editingHandler (event) {
-    setEditing(true)
-  }
-  // API requests
-  // async function addClass() {
-  //   const response = await axios({
-  //     method: "post",
-  //     url: `http://${props.root}/public/classes`,
-  //     data: {
-  //       class: name
-  //     }
-  //   });
-  //   if (callback) {
 
-  //     callback(response);
-  //   }
-  // }
+  function editingHandler(event) {
+    setEditing(true);
+  }
+
+  
 
   const content = editing ? (
-  <div>
-    <React.Fragment>
-      <AddClass root={props.root}/>
-    </React.Fragment>
-
-  </div> ) : (
+    <div>
+      <React.Fragment>
+        <AddClass root={props.root} setEditing={setEditing} />
+      </React.Fragment>
+    </div>
+  ) : (
     <div className="section is-dark">
       <article className="panel is-primary content">
         <div className="panel-heading level">
@@ -69,13 +67,30 @@ function Classes(props) {
           </div>
           <div className="level-right">
             <button className="button level-item" onClick={editingHandler}>
+            <React.Fragment>
               <FontAwesomeIcon icon="plus" />
+            </React.Fragment>
+
             </button>
           </div>
         </div>
         <p className="panel-tabs">
-          <a className={`${joined ? "is-active":""}`} onClick={() => {panelHelper(props.loadUserClasses(),true)}}>Joined</a>
-          <a className={`${joined ? "":"is-active"}`} onClick={() => {panelHelper(props.loadAllClasses(),false)}}>Search</a>
+          <a
+            className={`${joined ? "is-active" : ""}`}
+            onClick={() => {
+              panelHelper(props.loadUserClasses(), true);
+            }}
+          >
+            Joined
+          </a>
+          <a
+            className={`${joined ? "" : "is-active"}`}
+            onClick={() => {
+              panelHelper(props.loadAllClasses(loadAllClassesCallback), false);
+            }}
+          >
+            Search
+          </a>
         </p>
         <div className="panel-block">
           <p className="control has-icons-left">
