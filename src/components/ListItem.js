@@ -2,7 +2,7 @@ import React, {Component} from '../../node_modules/react';
 import {connect} from '../../node_modules/react-redux';
 import {completeToDo} from '../actions';
 import { MdDelete } from 'react-icons/md';
-import TimeAgo from 'react-timeago'
+// import TimeAgo from 'react-timeago'
 
 
 

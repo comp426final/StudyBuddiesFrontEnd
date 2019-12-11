@@ -4,8 +4,7 @@ import { GoogleLogin } from "../../node_modules/react-google-login";
 import { DebounceInput } from "../../node_modules/react-debounce-input";
 import axios from "../../node_modules/axios";
 // import {axios} from "axios";
-import List from './List';
-
+import List from "./List";
 
 function LandingPage(props) {
   const [validPass, setValidPass] = useState("info");
@@ -149,7 +148,10 @@ function LandingPage(props) {
       url: `http://${props.root}/user/data`,
       data: {
         data: {
-          classes: []
+          name: name,
+          data: {
+            classes: []
+          }
         }
       },
       headers: {
@@ -181,9 +183,7 @@ function LandingPage(props) {
       <section className="hero is-info">
         <div className="hero-body">
           <div class="container">
-            <h1 class="title has-text-centered">
-              Study Buddies
-            </h1>
+            <h1 class="title has-text-centered">Study Buddies</h1>
           </div>
         </div>
       </section>
@@ -255,7 +255,7 @@ function LandingPage(props) {
                         validUser === "danger"
                           ? "exclamation-triangle"
                           : "check"
-                        }`}
+                      }`}
                     />
                   </React.Fragment>
                 </span>
@@ -265,8 +265,8 @@ function LandingPage(props) {
               ) : validUser === "success" ? (
                 <p className="help is-success">Username is available</p>
               ) : (
-                    <p />
-                  )}
+                <p />
+              )}
             </div>
             <div className="field">
               <label className="label">Password</label>
@@ -291,7 +291,7 @@ function LandingPage(props) {
                         validPass === "danger"
                           ? "exclamation-triangle"
                           : "check"
-                        }`}
+                      }`}
                     />
                   </React.Fragment>
                 </span>
@@ -299,10 +299,10 @@ function LandingPage(props) {
               {validPass !== "danger" ? (
                 <div></div>
               ) : (
-                  <p className="help is-danger">
-                    Password must be at least 8 characters
+                <p className="help is-danger">
+                  Password must be at least 8 characters
                 </p>
-                )}
+              )}
             </div>
           </div>
 
@@ -337,49 +337,47 @@ function LandingPage(props) {
               </div>{" "}
             </nav>
           ) : (
-              <nav className="level">
-                <div className="level-left">
-                  <div className="field">
-                    <button className="button level-item" onClick={onLogIn}>
-                      Log in
+            <nav className="level">
+              <div className="level-left">
+                <div className="field">
+                  <button className="button level-item" onClick={onLogIn}>
+                    Log in
                   </button>
-                  </div>
                 </div>
-                <div className="level-right">
-                  <div className="field">
-                    <GoogleLogin
-                      clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
-                      render={renderProps => (
-                        <button
-                          className="button level-item"
-                          onClick={renderProps.onClick}
-                          disabled={renderProps.disabled}
-                        >
-                          Log in with Google
+              </div>
+              <div className="level-right">
+                <div className="field">
+                  <GoogleLogin
+                    clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
+                    render={renderProps => (
+                      <button
+                        className="button level-item"
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}
+                      >
+                        Log in with Google
                       </button>
-                      )}
-                      onRequest={googleLoginRequest}
-                      onSuccess={googleLoginSuccess}
-                      onFailure={googleLoginFail}
-                      cookiePolicy={"single_host_origin"}
-                    />
-                  </div>
+                    )}
+                    onRequest={googleLoginRequest}
+                    onSuccess={googleLoginSuccess}
+                    onFailure={googleLoginFail}
+                    cookiePolicy={"single_host_origin"}
+                  />
                 </div>
-              </nav>
-            )}
+              </div>
+            </nav>
+          )}
         </div>
         <section className="section columns">
           <div className="box">
             <div className="content is-primary">
               <h2 className="title has-text-centered">
                 General Announcements!
-            </h2>
+              </h2>
             </div>
             <List />
-
           </div>
         </section>
-
       </section>
     </div>
   );

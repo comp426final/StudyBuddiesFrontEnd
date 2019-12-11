@@ -22,7 +22,7 @@ function App() {
   const [currentToken, setCurrentToken] = useState("");
   const [updating, setUpdating] = useState(true);
 
-  const root = "comp426-finalapi.herokuapp.com";
+  const root = "localhost:3001";
   // comp426-finalapi.herokuapp.com localhost:3001
 
   //Login callbacks
@@ -35,9 +35,10 @@ function App() {
     setUser(props.data);
 
     updateUser(props.data.jwt, result => {
-      setClass(result.data.classes[0]);
-      setClasses(result.data.classes);
-      setUser(result);
+      console.log(result);
+      setClass(result.data.result.data.classes[0]);
+      setClasses(result.data.result.data.classes);
+      setUser(result.data.result);
       setLoggedIn(true);
       setLoading(false);
     });
@@ -103,11 +104,12 @@ function App() {
       }
     });
     if (callback) {
-      callback(response.data.result);
+      callback(response);
     }
   }
 
   async function joinClass(user, _class, callback) {
+
     if (
       user.data.classes.filter(classEl => {
         if (_class.name === classEl.name) {
@@ -142,7 +144,7 @@ function App() {
       }
 
       updateUser(currentToken, result => {
-        setUser(result);
+        setUser(result.data.result);
       });
     } else {
       console.log("already joined");
