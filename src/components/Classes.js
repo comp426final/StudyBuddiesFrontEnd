@@ -11,13 +11,14 @@ function Classes(props) {
   const [active, setActive] = useState(0)
 
   useEffect( () => {
-    setClasses(props.classes)
+    props.loadUserClasses(loadUserClassesCallback);
   }, [])
   
   // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
     return (
       <Class
+        getClass={props.getClass}
         currentUser={props.currentUser}
         key={classes.indexOf(_class)}
         id={classes.indexOf(_class)}
@@ -43,13 +44,15 @@ function Classes(props) {
               <FontAwesomeIcon icon="exclamation-triangle" />
             </React.Fragment>
           </span>
-          <p>{joined ? "Oops! You haven't joined any classes!": "Oops! There aren't any classes. Create one!"}</p>
+          <p>{joined ? "Oops! You haven't joined any classes!": "Oops! There are no more classes. Create one!"}</p>
         </div>
       );
     }
   };
 
   // Helper functions and handlers
+
+
   function loadAllClassesCallback(result) {
     let val = [];
     var keys = Object.keys(result);
@@ -62,13 +65,14 @@ function Classes(props) {
   }
 
   function loadUserClassesCallback(result) {
-    setClasses(result);
-    props.setClass(result[0]);
+    let val = [];
+    var keys = Object.keys(result);
+    keys.forEach(function(key) {
+      val.push(result[key]);
+    });
+    setClasses(val);
+    props.setClass(val[0]);
     setActive(0);
-  }
-
-  function panelHelper(classes, state) {
-    setJoined(state);
   }
 
   function editingHandler(event) {
@@ -100,7 +104,8 @@ function Classes(props) {
           <a
             className={`${joined ? "is-active" : ""}`}
             onClick={() => {
-              panelHelper(props.loadUserClasses(loadUserClassesCallback), true);
+              props.loadUserClasses(loadUserClassesCallback);
+              setJoined(true);
             }}
           >
             Joined
@@ -108,7 +113,8 @@ function Classes(props) {
           <a
             className={`${joined ? "" : "is-active"}`}
             onClick={() => {
-              panelHelper(props.loadAllClasses(loadAllClassesCallback), false);
+              props.loadAllClasses(loadAllClassesCallback);
+              setJoined(false);
             }}
           >
             Search

@@ -14,8 +14,12 @@ function Class(props) {
       <a
         className="panel-icon"
         onClick={() => {
-          props.setClass(props.class);
-          props.setActive(props.id);
+          props.getClass(props.class.name, (result) => {
+            props.setClass(result.data.result);
+            props.setActive(props.id);
+          })
+        
+          
         }}
       >
         <React.Fragment>
