@@ -20,7 +20,6 @@ function App() {
   const [currentClass, setClass] = useState("");
   const [currentClasses, setClasses] = useState("");
   const [currentToken, setCurrentToken] = useState("");
-  const [updating, setUpdating] = useState(true);
 
   const root = "comp426-finalapi.herokuapp.com";
   // comp426-finalapi.herokuapp.com localhost:3001
