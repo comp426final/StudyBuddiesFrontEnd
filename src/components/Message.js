@@ -6,14 +6,11 @@ function Message(props) {
   const content = (
     <article className="media">
   <figure className="media-left">
-    <p className="image is-64x64">
-      <img src="https://bulma.io/images/placeholders/128x128.png"/>
-    </p>
   </figure>
   <div className="media-content">
     <div className="content">
       <p>
-        <strong>{props.author}</strong> <small>@johnsmith</small> <small>31m</small>
+        <strong>{props.author}</strong>
         <br/>
         {props.content}
       </p>
