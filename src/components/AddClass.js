@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { DebounceInput } from "react-debounce-input";
-import axios from "axios";
+import React, { useState } from "../../node_modules/react";
+import { DebounceInput } from "../..//node_modules/react-debounce-input";
+import axios from "../../node_modules/axios";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function AddClass(props) {
