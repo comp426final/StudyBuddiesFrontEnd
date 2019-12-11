@@ -163,17 +163,18 @@ function App() {
   console.log(currentClasses);
   let content = loading ? (
     <div className="App">
-      <section className="hero is-primary">
+      <section className="hero is-info">
         <div className="hero-body"></div>
       </section>
     </div>
   ) : loggedIn ? (
     <div className="App">
-      <section className="hero is-primary">
+      <section className="hero is-info">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title"></h1>
-            <h2 className="subtitle">Welcome!</h2>
+            <h1 className="title has-text-centered"> 
+              Study Buddies
+            </h1>
           </div>
         </div>
       </section>

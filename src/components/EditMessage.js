@@ -41,7 +41,7 @@ function EditMessage(props) {
     <div className="field is-grouped edit-message">
       <p className="control is-expanded">
         <input
-          className="input is-primary"
+          className="input is-info"
           type="text"
           placeholder="Send a message!"
           onChange={msgHelper}
@@ -49,7 +49,7 @@ function EditMessage(props) {
       </p>
       <p className="control">
         <button
-          className="button is-primary"
+          className="button is-info"
           onChange={msgHelper}
           onClick={onSubmitHandler}
         >

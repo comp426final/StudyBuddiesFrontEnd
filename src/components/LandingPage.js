@@ -178,8 +178,14 @@ function LandingPage(props) {
 
   let content = (
     <div className="App">
-      <section className="hero is-primary">
-        <div className="hero-body"></div>
+      <section className="hero is-info">
+        <div className="hero-body">
+          <div class="container">
+            <h1 class="title has-text-centered">
+              Study Buddies
+            </h1>
+          </div>
+        </div>
       </section>
       <section className="section columns">
         <div className="box column is-offset-one-third is-one-third">
