@@ -87,7 +87,6 @@ function LandingPage(props) {
 
   const googleLoginFail = response => {
     props.setLoading(false);
-    console.log(response);
   };
 
   // Button handlers
@@ -131,8 +130,6 @@ function LandingPage(props) {
         }
       }
     });
-
-    console.log(response);
     if (callback) {
       callback(response);
     }
@@ -172,7 +169,6 @@ function LandingPage(props) {
                     setSignUpMode(true);
                     if (username.length !== 0) {
                       checkUser(username, result => {
-                        console.log(result);
                         if (result.status === 200) {
                           setValidUser("success");
                         } else {
@@ -190,7 +186,6 @@ function LandingPage(props) {
                     setSignUpMode(false);
                     if (username.length !== 0) {
                       checkUser(username, result => {
-                        console.log(result);
                         if (result.status !== 200) {
                           setValidUser("success");
                         } else {

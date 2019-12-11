@@ -8,10 +8,21 @@ function Classes(props) {
   const [joined, setJoined] = useState(true);
   const [classes, setClasses] = useState([]);
   const [editing, setEditing] = useState(false);
+  const [active, setActive] = useState(0)
 
   // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
-    return <Class key={classes.indexOf(_class)} class={_class} setClass={props.setClass} joinClass={props.joinClass}/>;
+    return (
+      <Class
+        key={classes.indexOf(_class)}
+        id={classes.indexOf(_class)}
+        class={_class}
+        setClass={props.setClass}
+        joinClass={props.joinClass}
+        active={active}
+        setActive={setActive}
+      />
+    );
   };
 
   // Map the classes
@@ -20,10 +31,13 @@ function Classes(props) {
       return classes.map(createClass);
     } else {
       return (
-        <div className="panel-block">
-          <p className="content has-text-centered">
-            oops, you haven't joined any classes!
-          </p>
+        <div className="content has-text-centered has-icons-left">
+          <span className="icon is-left">
+            <React.Fragment>
+              <FontAwesomeIcon icon="exclamation-triangle" />
+            </React.Fragment>
+          </span>
+          <p>Oops! You haven't joined any classes!</p>
         </div>
       );
     }
@@ -31,13 +45,11 @@ function Classes(props) {
 
   // Helper functions and handlers
   function loadAllClassesCallback(result) {
-    console.log(result);
     let val = [];
     var keys = Object.keys(result);
-    keys.forEach(function(key){
-        val.push(result[key]);
+    keys.forEach(function(key) {
+      val.push(result[key]);
     });
-    console.log(val);
     setClasses(val);
   }
 
@@ -49,8 +61,6 @@ function Classes(props) {
   function editingHandler(event) {
     setEditing(true);
   }
-
-  
 
   const content = editing ? (
     <div>
@@ -67,10 +77,9 @@ function Classes(props) {
           </div>
           <div className="level-right">
             <button className="button level-item" onClick={editingHandler}>
-            <React.Fragment>
-              <FontAwesomeIcon icon="plus" />
-            </React.Fragment>
-
+              <React.Fragment>
+                <FontAwesomeIcon icon="plus" />
+              </React.Fragment>
             </button>
           </div>
         </div>

@@ -31,8 +31,7 @@ function AddClass(props) {
         data: {
           name: name,
           dep: dep,
-          description:
-          description,
+          description: description,
           messages: [],
           members: []
         }
@@ -46,16 +45,20 @@ function AddClass(props) {
   // Change handlers
   const nameHandler = event => {
     const val = event.target.value;
-    checkClass(val, response => {
-      if (val.length === 0) {
-        setValidClass("primary");
-      } else if (response.status === 200) {
-        setValidClass("success");
-      } else {
-        setValidClass("danger");
-      }
-    });
-    setName(val);
+    if (val.includes(" ") || val.includes("/")) {
+      setValidClass("warning");
+    } else {
+      checkClass(val, response => {
+        if (val.length === 0) {
+          setValidClass("primary");
+        } else if (response.status === 200) {
+          setValidClass("success");
+        } else {
+          setValidClass("danger");
+        }
+      });
+      setName(val);
+    }
   };
 
   const descriptionHandler = event => {
@@ -73,6 +76,10 @@ function AddClass(props) {
       props.setEditing(false);
     });
   };
+
+  const onExitHandler = () => {
+    props.setEditing(false);
+  }
 
   const content = (
     <div className="section is-dark">
@@ -95,6 +102,15 @@ function AddClass(props) {
                 placeholder="Class Name"
               />{" "}
             </div>
+            <p className={`help is-${validClass}`}>
+              {validClass === "success"
+                ? "Class name is available."
+                : validClass === "warning"
+                ? "Class name is invalid."
+                : validClass === "danger"
+                ? "Class name is not available."
+                : ""}
+            </p>
           </div>
 
           <div className="field">
@@ -120,10 +136,15 @@ function AddClass(props) {
             </div>
           </div>
 
-          <div className="field">
+          <div className="field is-grouped">
             <p className="control">
               <button className="button" onClick={onSubmitHandler}>
                 Create
+              </button>
+            </p>
+            <p className="control">
+              <button className="button" onClick={onExitHandler}>
+                Back
               </button>
             </p>
           </div>

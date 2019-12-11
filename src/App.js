@@ -20,7 +20,7 @@ function App() {
   const [currentClass, setClass] = useState("");
   const [currentToken, setCurrentToken] = useState("");
 
-  const root = "comp426-finalapi.herokuapp.com";
+  const root = "localhost:3001";
   // comp426-finalapi.herokuapp.com localhost:3001
 
   //Login callbacks
@@ -29,11 +29,12 @@ function App() {
   };
 
   const logInCallback = props => {
+
+    setLoggedIn(true);
     setUser(props.data.data);
-    if ( props.data.data.classes[0] ) {
+    if (props.data.data.classes[0]) {
       setClass(props.data.data.classes[0]);
     }
-    setLoggedIn(true);
     setLoading(false);
   };
 
@@ -41,7 +42,7 @@ function App() {
   async function loadAllClasses(callback) {
     const response = await axios({
       method: "get",
-      url: `http://${root}/public/classes`,
+      url: `http://${root}/public/classes`
     });
     callback(response.data.result);
   }
@@ -50,20 +51,18 @@ function App() {
       method: "put",
       url: `http://${root}/public/classes`,
       data: {
-        type: 'merge',
+        type: "merge",
         data: {
-          
+          members: [currentUser]
         }
       }
     });
     callback(response.data.result);
   }
 
-
-
   // Helper functions
   function loadUserClasses() {
-    return currentUser.classes
+    return currentUser.classes;
   }
 
   let content = loading ? (
@@ -86,13 +85,25 @@ function App() {
         <div className="columns is-gapless">
           <div className="column is-quarter">
             <React.Fragment>
-              <Classes loadAllClasses={loadAllClasses} loadUserClasses={loadUserClasses} root={root} setClass={setClass} currentClass={currentClass} currentUser={currentUser}/>
+              <Classes
+                loadAllClasses={loadAllClasses}
+                loadUserClasses={loadUserClasses}
+                root={root}
+                setClass={setClass}
+                currentClass={currentClass}
+                currentUser={currentUser}
+                joinClass={joinClass}
+              />
             </React.Fragment>
           </div>
           <div className="column is-half">
             <React.Fragment>
               <Messages messages={[]} />
-              <EditMessage content={"Send a message!"} />
+              <EditMessage
+                content={"Send a message!"}
+                currentClass={currentClass}
+                currentUser={currentUser}
+              />
             </React.Fragment>
           </div>
           <div className="column is-quarter">
