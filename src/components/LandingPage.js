@@ -94,6 +94,7 @@ function LandingPage(props) {
     props.setLoading(true);
     signUp(username, password, () => {
       logIn(username, password);
+      addUser(username);
     });
     props.setLoading(false);
   }
@@ -125,6 +126,22 @@ function LandingPage(props) {
       data: {
         name: name,
         pass: pass,
+        data: {
+          classes: []
+        }
+      }
+    });
+    if (callback) {
+      callback(response);
+    }
+  }
+
+  async function addUser(name, callback) {
+    const response = await axios({
+      method: "post",
+      url: `http://${props.root}/account/create`,
+      data: {
+        name: name,
         data: {
           classes: []
         }

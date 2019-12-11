@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Class from "./Class";
 import AddClass from "./AddClass";
-import axios from "axios";
+// import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Classes(props) {
@@ -10,10 +10,16 @@ function Classes(props) {
   const [editing, setEditing] = useState(false);
   const [active, setActive] = useState(0)
 
+  useEffect( () => {
+    console.log(props.classes);
+    setClasses(props.classes)
+  }, [])
+  
   // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
     return (
       <Class
+        currentUser={props.currentUser}
         key={classes.indexOf(_class)}
         id={classes.indexOf(_class)}
         class={_class}
@@ -21,6 +27,7 @@ function Classes(props) {
         joinClass={props.joinClass}
         active={active}
         setActive={setActive}
+        joined={joined}
       />
     );
   };
@@ -53,8 +60,11 @@ function Classes(props) {
     setClasses(val);
   }
 
+  function loadUserClassesCallback(result) {
+    setClasses(result);
+  }
+
   function panelHelper(classes, state) {
-    setClasses(classes);
     setJoined(state);
   }
 
@@ -87,7 +97,7 @@ function Classes(props) {
           <a
             className={`${joined ? "is-active" : ""}`}
             onClick={() => {
-              panelHelper(props.loadUserClasses(), true);
+              panelHelper(props.loadUserClasses( loadUserClassesCallback), true);
             }}
           >
             Joined

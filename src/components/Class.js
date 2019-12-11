@@ -3,7 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Class(props) {
   const content = (
-    <div className={`panel-block ${props.id === props.active ? "is-active":""}`}>
+    <div
+      onClick={() => {
+        if (!props.joined) {
+          props.joinClass(props.currentUser, props.class);
+        }
+      }}
+      className={`panel-block ${props.id === props.active ? "is-active" : ""}`}
+    >
       <a
         className="panel-icon"
         onClick={() => {
@@ -12,7 +19,7 @@ function Class(props) {
         }}
       >
         <React.Fragment>
-          <FontAwesomeIcon icon="book" />
+          <FontAwesomeIcon icon={props.joined ? "book" : `sign-in-alt`} />
         </React.Fragment>
       </a>
       {props.class.name}
