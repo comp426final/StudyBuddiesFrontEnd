@@ -11,7 +11,7 @@ function Messages (props) {
       <Message
        key={message.id}
        content={message.content}
-       user={message.author}
+       author={message.author}
       />
     );
   };
