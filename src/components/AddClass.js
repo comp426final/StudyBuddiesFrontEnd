@@ -74,6 +74,7 @@ function AddClass(props) {
   const onSubmitHandler = () => {
     addClass(name, department, description, response => {
       props.setEditing(false);
+      props.loadAllClasses(props.loadAllClassesCallback);
     });
   };
 
