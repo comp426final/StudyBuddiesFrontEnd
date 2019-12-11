@@ -34,7 +34,7 @@ function AddClass(props) {
           description: description,
           messages: [],
           members: []
-        }
+        },
       }
     });
     if (callback) {

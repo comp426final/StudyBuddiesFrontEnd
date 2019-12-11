@@ -20,6 +20,7 @@ function App() {
   const [currentClass, setClass] = useState("");
   const [currentClasses, setClasses] = useState("");
   const [currentToken, setCurrentToken] = useState("");
+  const [updating, setUpdating] = useState(true);
 
   const root = "comp426-finalapi.herokuapp.com";
   // comp426-finalapi.herokuapp.com localhost:3001
@@ -34,8 +35,8 @@ function App() {
     setUser(props.data);
 
     updateUser(props.data.jwt, result => {
-      setClass(result.classes[0]);
-      setClasses(result.classes);
+      setClass(result.data.classes[0]);
+      setClasses(result.data.classes);
       setUser(result);
       setLoggedIn(true);
       setLoading(false);
@@ -43,6 +44,21 @@ function App() {
   };
 
   // API requests
+
+  async function getClass(element, callback) {
+    const result = await axios({
+      method: "get",
+      url: `http://${root}/public/classes/${element}`,
+      headers: {
+        Authorization: `Bearer ${currentToken}`
+      }
+    });
+    if ( callback ) {
+      callback(result);
+    }
+    return result;
+  }
+
   async function loadAllClasses(callback) {
     const response = await axios({
       method: "get",
@@ -54,16 +70,27 @@ function App() {
   }
 
   async function loadUserClasses(callback) {
+    let classes = [];
     const response = await axios({
       method: "get",
-      url: `http://${root}/user/data/classes`,
+      url: `http://${root}/user/data/data/classes`,
       headers: {
         Authorization: `Bearer ${currentToken}`
       }
     });
-    if (callback) {
-      callback(response.data.result);
-    }
+    let done = 0;
+    await response.data.result.forEach(async element => {
+      let result = await getClass(element);
+      classes.push(result.data.result);
+      done += 1;
+      if (callback && done === response.data.result.length) {
+        callback(classes);
+      }
+    });
+
+    
+
+    return classes;
   }
 
   async function updateUser(token, callback) {
@@ -81,13 +108,11 @@ function App() {
 
   async function joinClass(user, _class, callback) {
     if (
-      !(
-        user.classes.filter(classEl => {
-          if (classEl.name === _class.name) {
-            return true;
-          }
-        }).length > 0
-      )
+      user.data.classes.filter(classEl => {
+        if (_class.name === classEl.name) {
+          return true;
+        }
+      }).length === 0
     ) {
       let response = await axios({
         method: "post",
@@ -102,9 +127,9 @@ function App() {
       }
       response = await axios({
         method: "post",
-        url: `http://${root}/user/data/classes`,
+        url: `http://${root}/user/data/data/classes`,
         data: {
-          data: [_class],
+          data: [_class.name],
           type: "merge"
         },
         headers: {
@@ -122,6 +147,20 @@ function App() {
       console.log("already joined");
     }
   }
+
+  // Other Helpers
+  
+  async function onNewMessage() {
+    getClass(currentClass.name, (result) => {
+      setClass(result.data.result);
+    })
+    loadUserClasses(result=>{
+      setClasses(result)
+    })
+  }
+
+
+  console.log(currentClasses);
   let content = loading ? (
     <div className="App">
       <section className="hero is-primary">
@@ -143,6 +182,7 @@ function App() {
           <div className="column is-quarter">
             <React.Fragment>
               <Classes
+                getClass={getClass}
                 loadAllClasses={loadAllClasses}
                 loadUserClasses={loadUserClasses}
                 classes={currentClasses}
@@ -158,6 +198,7 @@ function App() {
             <div className="section">
               <React.Fragment>
                 <EditMessage
+                onNewMessage={onNewMessage}
                   currentToken={currentToken}
                   root={root}
                   content={"Send a message!"}

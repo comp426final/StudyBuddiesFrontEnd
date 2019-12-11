@@ -148,8 +148,11 @@ function LandingPage(props) {
       url: `http://${props.root}/user/data`,
       data: {
         data: {
-          classes:[]
-        }
+          name: name,
+          data: {
+            classes:[]
+          }
+        },
       },
       headers: {
         Authorization: `Bearer ${token}`

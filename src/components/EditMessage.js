@@ -16,36 +16,25 @@ function EditMessage(props) {
       props.currentClass.name,
       props.currentUser.name,
       message,
-      response => {}
+      response => {
+        props.onNewMessage();
+      }
     );
   }
 
   async function addMessage(_class, author, content, callback) {
     let response = await axios({
       method: "post",
-      url: `http://${props.root}/public/classes/${_class.name}/messages`,
+      url: `http://${props.root}/public/classes/${_class}/messages`,
       data: {
-        data: [{author: author, content: content}],
+        data: {author: author, content: content},
         type: "merge"
       }
     });
     if (callback) {
       callback(response.data.result);
     }
-    response = await axios({
-      method: "post",
-      url: `http://${props.root}/user/data/classes/${_class.name}/messages`,
-      data: {
-        data: [{author: author, content: content}],
-        type: "merge"
-      },
-      headers: {
-        Authorization: `Bearer ${props.currentToken}`
-      }
-    });
-    if (callback) {
-      callback(response.data.result);
-    }
+    
   }
 
   const content = (
