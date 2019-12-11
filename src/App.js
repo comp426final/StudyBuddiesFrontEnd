@@ -22,7 +22,7 @@ function App() {
   const [currentToken, setCurrentToken] = useState("");
   const [updating, setUpdating] = useState(true);
 
-  const root = "localhost:3001";
+  const root = "comp426-finalapi.herokuapp.com";
   // comp426-finalapi.herokuapp.com localhost:3001
 
   //Login callbacks
