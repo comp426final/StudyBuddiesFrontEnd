@@ -5,12 +5,13 @@ import "./css/styles.css";
 import Classes from "./components/Classes";
 import Messages from "./components/Messages";
 import Announcements from "./components/Announcements";
+
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GoogleLogout } from "react-google-login";
 import LandingPage from "./components/LandingPage";
 import EditMessage from "./components/EditMessage";
-
 import axios from "axios";
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -91,8 +92,7 @@ function App() {
           </div>
           <div className="column is-half">
             <React.Fragment>
-              <Messages messages={[]} />
-              <EditMessage content={"Send a message!"} />
+              <Messages /*messages={[]} */ />
             </React.Fragment>
           </div>
           <div className="column is-quarter">

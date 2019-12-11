@@ -13,8 +13,8 @@ function EditMessage(props) {
 
   function onSubmitHandler() {
     addMessage(
-      props.currentClass.name,
-      props.currentUser.name,
+      props.class.name,
+      props.user.name,
       message,
       response => {
         console.log(response);

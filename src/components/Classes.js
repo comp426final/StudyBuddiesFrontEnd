@@ -9,10 +9,13 @@ function Classes(props) {
   const [classes, setClasses] = useState([]);
   const [editing, setEditing] = useState(false);
 
+
   // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
     return <Class key={classes.indexOf(_class)} class={_class} setClass={props.setClass} joinClass={props.joinClass}/>;
   };
+  
+
 
   // Map the classes
   const createClasses = classes => {
