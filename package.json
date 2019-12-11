@@ -10,6 +10,7 @@
     "axios": "^0.19.0",
     "bootstrap": "^4.4.1",
     "firebase": "^7.5.2",
+    "lock-verify": "^2.1.0",
     "materialize-css": "^1.0.0-rc.2",
     "prod": "^1.0.1",
     "react": "^16.11.0",

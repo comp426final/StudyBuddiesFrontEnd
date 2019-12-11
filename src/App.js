@@ -22,6 +22,8 @@ function App() {
   const [currentToken, setCurrentToken] = useState("");
 
   const root = "comp426-finalapi.herokuapp.com";
+
+
   // comp426-finalapi.herokuapp.com localhost:3001
 
   //Login callbacks
@@ -266,60 +268,3 @@ function App() {
 }
 
 export default App;
-
-/*
-<div className="field">
-              <label className="label">Username</label>
-              <div className="control has-icons-left has-icons-right">
-                <input
-                  className="input is-primary"
-                  type="text"
-                  placeholder="Username"
-                />
-                <span class="icon is-small is-left">
-                  <React.Fragment>
-                    <FontAwesomeIcon icon="user" />
-                  </React.Fragment>
-                </span>
-                <span class="icon is-small is-right">
-                  <React.Fragment>
-                    <FontAwesomeIcon icon="check" />
-                  </React.Fragment>
-                </span>
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Password</label>
-              <div className="control has-icons-left has-icons-right">
-                <input
-                  className="input is-primary"
-                  type="text"
-                  placeholder="Password"
-                />
-                <span class="icon is-small is-left">
-                  <React.Fragment>
-                    <FontAwesomeIcon icon="lock" />
-                  </React.Fragment>
-                </span>
-                <span class="icon is-small is-right">
-                  <React.Fragment>
-                    <FontAwesomeIcon icon="check" />
-                  </React.Fragment>
-                </span>
-              </div>
-            </div>
-                        <div className="field has-text-centered">
-              <div className="level">
-                <div className="level-left">
-                  <button className="button is-primary" onClick={loginHandler}>
-                    Sign up
-                  </button>
-                </div>
-                <div className="level-right">
-                  <button className="button is-primary" onClick={loginHandler}>
-                    Log in
-                  </button>
-                </div>
-              </div>
-            </div>
-          */
