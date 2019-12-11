@@ -65,7 +65,7 @@ function App() {
       url: `http://${root}/public/classes`
     });
     if (callback) {
-      callback(response.data.result);
+      callback(response);
     }
   }
 
@@ -85,6 +85,7 @@ function App() {
       done += 1;
       if (callback && done === response.data.result.length) {
         callback(classes);
+        setClasses(classes)
       }
     });
 
@@ -159,8 +160,6 @@ function App() {
     })
   }
 
-
-  console.log(currentClasses);
   let content = loading ? (
     <div className="App">
       <section className="hero is-primary">

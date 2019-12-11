@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from "react";
 import Class from "./Class";
 import AddClass from "./AddClass";
-// import axios from "axios";
+import TextInput from "react-autocomplete-input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Classes(props) {
   const [joined, setJoined] = useState(true);
   const [classes, setClasses] = useState([]);
+  const [classNames, setClassNames] = useState([]);
   const [editing, setEditing] = useState(false);
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(0);
+  const [finding, setFinding] = useState("")
 
-  useEffect( () => {
+  useEffect(() => {
+    let names = [];
+    classes.forEach( (clss) => {
+      names.push(clss.name);
+    })
+    setClassNames(names);
+  }, [classes]);
+
+  useEffect (() => {
     props.loadUserClasses(loadUserClassesCallback);
+
   }, [])
-  
+
   // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
     return (
@@ -44,7 +55,11 @@ function Classes(props) {
               <FontAwesomeIcon icon="exclamation-triangle" />
             </React.Fragment>
           </span>
-          <p>{joined ? "Oops! You haven't joined any classes!": "Oops! There are no more classes. Create one!"}</p>
+          <p>
+            {joined
+              ? "Oops! You haven't joined any classes!"
+              : "Oops! There are no more classes. Create one!"}
+          </p>
         </div>
       );
     }
@@ -52,12 +67,11 @@ function Classes(props) {
 
   // Helper functions and handlers
 
-
   function loadAllClassesCallback(result) {
     let val = [];
-    var keys = Object.keys(result);
+    var keys = Object.keys(result.data.result);
     keys.forEach(function(key) {
-      val.push(result[key]);
+      val.push(result.data.result[key]);
     });
     setClasses(val);
     props.setClass(val[0]);
@@ -79,10 +93,25 @@ function Classes(props) {
     setEditing(true);
   }
 
+  const onSearchChange = event => {
+  setFinding(event);
+  }
+
+  const onSearchSubmit = () => {
+    props.getClass(finding,(result) => {
+      props.setClass(result.data.result);
+    })
+  }
+
   const content = editing ? (
     <div>
       <React.Fragment>
-        <AddClass root={props.root} setEditing={setEditing} loadAllClassesCallback={loadUserClassesCallback} loadAllClasses={props.loadAllClasses} />
+        <AddClass
+          root={props.root}
+          setEditing={setEditing}
+          loadAllClassesCallback={loadUserClassesCallback}
+          loadAllClasses={props.loadAllClasses}
+        />
       </React.Fragment>
     </div>
   ) : (
@@ -121,18 +150,28 @@ function Classes(props) {
           </a>
         </p>
         <div className="panel-block">
-          <p className="control has-icons-left">
-            <input
-              className="input is-primary"
-              type="text"
-              placeholder="Search"
-            />
-            <span className="icon is-left">
+          <div className="field has-addons">
+            <div className="control is-expanded">
               <React.Fragment>
-                <FontAwesomeIcon icon="search" />
-              </React.Fragment>{" "}
-            </span>
-          </p>
+                <TextInput
+                  options={classNames}
+                  className="input is-primary"
+                  placeholder="Search"
+                  Component="input"
+                  trigger=""
+                  spacer=""
+                  onChange={onSearchChange}
+                />
+              </React.Fragment>
+            </div>
+            <div className="control">
+              <button className="button is-primary" onClick={onSearchSubmit}>
+                <React.Fragment>
+                  <FontAwesomeIcon icon={props.joined ? "book" : `sign-in-alt`} />
+                </React.Fragment>
+              </button>
+            </div>
+          </div>
         </div>
         <React.Fragment>{createClasses(classes)}</React.Fragment>
       </article>

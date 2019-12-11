@@ -3,31 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Class(props) {
   const content = (
-    <div
+    <a
       onClick={() => {
         if (!props.joined) {
           props.joinClass(props.currentUser, props.class);
-        }
-      }}
-      className={`panel-block ${props.id === props.active ? "is-active" : ""}`}
-    >
-      <a
-        className="panel-icon"
-        onClick={() => {
-          props.getClass(props.class.name, (result) => {
+        } else {
+          props.getClass(props.class.name, result => {
             props.setClass(result.data.result);
             props.setActive(props.id);
-          })
-        
-          
-        }}
-      >
+          });
+        }
+      }}
+      className={`panel-block ${props.id === props.active ? "is-active" : ""} `}
+    >
+      <span className="panel-icon">
         <React.Fragment>
           <FontAwesomeIcon icon={props.joined ? "book" : `sign-in-alt`} />
         </React.Fragment>
-      </a>
+      </span>
       {props.class.name}
-    </div>
+    </a>
   );
   return content;
 }

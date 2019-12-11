@@ -4,10 +4,10 @@ import React from "react";
 
 function Message(props) {
   const content = (
-    <article className="media">
+    <article className="media ">
   <figure className="media-left">
   </figure>
-  <div className="media-content">
+  <div className="media-content ">
     <div className="content">
       <p>
         <strong>{props.author}</strong>

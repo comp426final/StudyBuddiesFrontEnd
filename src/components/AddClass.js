@@ -118,7 +118,7 @@ function AddClass(props) {
             <label className="label">Department</label>
             <div className="control ">
               <input
-                className="input"
+                className="input is-primary"
                 type="text"
                 placeholder="Department"
                 onChange={departmentHandler}
@@ -130,7 +130,7 @@ function AddClass(props) {
             <label className="label">Description</label>
             <div className="control">
               <textarea
-                className="textarea"
+                className="textarea is-primary"
                 onChange={descriptionHandler}
                 placeholder="Write a short description here"
               />
@@ -139,12 +139,12 @@ function AddClass(props) {
 
           <div className="field is-grouped">
             <p className="control">
-              <button className="button" onClick={onSubmitHandler}>
+              <button className="button is-success" onClick={onSubmitHandler}>
                 Create
               </button>
             </p>
             <p className="control">
-              <button className="button" onClick={onExitHandler}>
+              <button className="button is-danger  " onClick={onExitHandler}>
                 Back
               </button>
             </p>

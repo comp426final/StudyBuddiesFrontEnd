@@ -38,7 +38,7 @@ function EditMessage(props) {
   }
 
   const content = (
-    <div className="field is-grouped edit-message">
+    <div className="field has-addons edit-message">
       <p className="control is-expanded">
         <input
           className="input is-primary"

@@ -24,7 +24,7 @@ function Messages (props) {
   };
 
     const content =  (
-    <div className="section messages">
+    <div className="section messages box has-background-white">
         <React.Fragment>
             {createMessages(props.messages)}
         </React.Fragment>
