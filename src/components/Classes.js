@@ -82,7 +82,7 @@ function Classes(props) {
   const content = editing ? (
     <div>
       <React.Fragment>
-        <AddClass root={props.root} setEditing={setEditing} />
+        <AddClass root={props.root} setEditing={setEditing} loadAllClassesCallback={loadUserClassesCallback} loadAllClasses={props.loadAllClasses} />
       </React.Fragment>
     </div>
   ) : (
