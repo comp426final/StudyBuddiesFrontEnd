@@ -21,21 +21,30 @@ function EditMessage(props) {
   }
 
   async function addMessage(_class, author, content, callback) {
-    const response = await axios({
+    let response = await axios({
       method: "post",
-      url: `http://${props.root}/public/classes/${_class}/messages`,
+      url: `http://${props.root}/public/classes/${_class.name}/messages`,
       data: {
-        type: "merge",
-        data: [
-          {
-            author: author,
-            content: content
-          }
-        ]
+        data: [{author: author, content: content}],
+        type: "merge"
       }
     });
     if (callback) {
-      callback(response);
+      callback(response.data.result);
+    }
+    response = await axios({
+      method: "post",
+      url: `http://${props.root}/user/data/classes/${_class.name}/messages`,
+      data: {
+        data: [{author: author, content: content}],
+        type: "merge"
+      },
+      headers: {
+        Authorization: `Bearer ${props.currentToken}`
+      }
+    });
+    if (callback) {
+      callback(response.data.result);
     }
   }
 
@@ -46,6 +55,7 @@ function EditMessage(props) {
           className="input is-primary"
           type="text"
           placeholder="Send a message!"
+          onChange={msgHelper}
         />
       </p>
       <p className="control">

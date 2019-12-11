@@ -24,7 +24,6 @@ function App() {
   const root = "localhost:3001";
   // comp426-finalapi.herokuapp.com localhost:3001
 
-
   //Login callbacks
   const googleLogoutSuccess = () => {
     setLoggedIn(false);
@@ -35,13 +34,12 @@ function App() {
     setUser(props.data);
 
     updateUser(props.data.jwt, result => {
-      setClass(result.classes[0])
-      setClasses(result.classes)
-      setLoggedIn(true);    
+      setClass(result.classes[0]);
+      setClasses(result.classes);
+      setUser(result);
+      setLoggedIn(true);
       setLoading(false);
     });
-
- 
   };
 
   // API requests
@@ -68,7 +66,7 @@ function App() {
     }
   }
 
-  async function updateUser( token, callback) {
+  async function updateUser(token, callback) {
     const response = await axios({
       method: "get",
       url: `http://${root}/user/data`,
@@ -81,21 +79,16 @@ function App() {
     }
   }
 
-  async function getMessages(className, callback) {
-    const response = await axios({
-      method: "get",
-      url: `http://${root}/public/classes/${className}/messages`
-    });
-    if (callback) {
-      callback(response.data.result);
-    }
-  }
-
   async function joinClass(user, _class, callback) {
-    console.log(user.data.classes);
-    console.log(_class.name);
-    if (!user.data.classes.includes(_class.name)) {
-      console.log(user);
+    if (
+      !(
+        user.classes.filter(classEl => {
+          if (classEl.name === _class.name) {
+            return true;
+          }
+        }).length > 0
+      )
+    ) {
       let response = await axios({
         method: "post",
         url: `http://${root}/public/classes/${_class.name}/members`,
@@ -123,11 +116,12 @@ function App() {
       }
 
       updateUser(currentToken, result => {
-        console.log(result);
-      })
+        setUser(result);
+      });
+    } else {
+      console.log("already joined");
     }
   }
-
   let content = loading ? (
     <div className="App">
       <section className="hero is-primary">
@@ -161,16 +155,22 @@ function App() {
             </React.Fragment>
           </div>
           <div className="column is-half">
-            <React.Fragment>
-              <Messages messages={[]} />
-              <EditMessage
-                root={root}
-                content={"Send a message!"}
-                currentClass={currentClass}
-                currentUser={currentUser}
-              />
-            </React.Fragment>
+            <div className="section">
+              <React.Fragment>
+                <EditMessage
+                  currentToken={currentToken}
+                  root={root}
+                  content={"Send a message!"}
+                  currentClass={currentClass}
+                  currentUser={currentUser}
+                />
+                <Messages
+                  messages={currentClass ? currentClass.messages : []}
+                />
+              </React.Fragment>
+            </div>
           </div>
+
           <div className="column is-quarter">
             <React.Fragment>
               <Announcements announcements={[]} />

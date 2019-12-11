@@ -11,7 +11,6 @@ function Classes(props) {
   const [active, setActive] = useState(0)
 
   useEffect( () => {
-    console.log(props.classes);
     setClasses(props.classes)
   }, [])
   
@@ -58,10 +57,14 @@ function Classes(props) {
       val.push(result[key]);
     });
     setClasses(val);
+    props.setClass(val[0]);
+    setActive(0);
   }
 
   function loadUserClassesCallback(result) {
     setClasses(result);
+    props.setClass(result[0]);
+    setActive(0);
   }
 
   function panelHelper(classes, state) {
@@ -97,7 +100,7 @@ function Classes(props) {
           <a
             className={`${joined ? "is-active" : ""}`}
             onClick={() => {
-              panelHelper(props.loadUserClasses( loadUserClassesCallback), true);
+              panelHelper(props.loadUserClasses(loadUserClassesCallback), true);
             }}
           >
             Joined
