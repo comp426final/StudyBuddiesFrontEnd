@@ -43,7 +43,7 @@ function Classes(props) {
               <FontAwesomeIcon icon="exclamation-triangle" />
             </React.Fragment>
           </span>
-          <p>Oops! You haven't joined any classes!</p>
+          <p>{joined ? "Oops! You haven't joined any classes!": "Oops! There aren't any classes. Create one!"}</p>
         </div>
       );
     }

@@ -71,12 +71,16 @@ function LandingPage(props) {
 
   const googleLoginSuccess = response => {
     const ID = response.googleId;
-    checkUser(ID, result => {
+    const name = response.profileObj.givenName;
+    checkUser(name, result => {
       if (result.status !== 200) {
-        logIn(ID, ID);
+        logIn(name, ID);
       } else {
-        signUp(ID, ID, () => {
-          logIn(ID, ID);
+        signUp(name, ID, () => {
+          logIn(name, ID, result => {
+            console.log(result);
+            addUser(name, result.data.jwt);
+          });
         });
       }
     });
@@ -93,8 +97,10 @@ function LandingPage(props) {
   function onSignUp() {
     props.setLoading(true);
     signUp(username, password, () => {
-      logIn(username, password);
-      addUser(username);
+      logIn(username, password, result => {
+        console.log("adding user...");
+        addUser(username, result.data.jwt);
+      });
     });
     props.setLoading(false);
   }
@@ -136,15 +142,17 @@ function LandingPage(props) {
     }
   }
 
-  async function addUser(name, callback) {
+  async function addUser(name, token, callback) {
     const response = await axios({
       method: "post",
-      url: `http://${props.root}/account/create`,
+      url: `http://${props.root}/user/data`,
       data: {
-        name: name,
         data: {
-          classes: []
+          classes:[]
         }
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
       }
     });
     if (callback) {
