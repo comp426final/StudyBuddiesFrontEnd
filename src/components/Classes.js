@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Classes(props) {
   const [joined, setJoined] = useState(true);
-  const [alreadyJoined, setAlreadyJoined] = useState(false);
+  const [joinFailed, setJoinFailed] = useState(false);
+  const [joinSucceeded, setJoinSucceeded] = useState(false);
   const [classes, setClasses] = useState([]);
   const [classNames, setClassNames] = useState([]);
   const [editing, setEditing] = useState(false);
@@ -31,7 +32,8 @@ function Classes(props) {
   const createClass = _class => {
     return (
       <Class
-        setAlreadyJoined={setAlreadyJoined}
+        setJoinFailed={setJoinFailed}
+        setJoinSucceeded={setJoinSucceeded}
         getClass={props.getClass}
         currentUser={props.currentUser}
         key={classes.indexOf(_class)}
@@ -108,8 +110,8 @@ function Classes(props) {
     props.getClass(finding, async result => {
       const status = await props.joinClass(props.currentUser, result.data.result);
          if (status === 400 ) {
-           setAlreadyJoined(true);
-         } else { setAlreadyJoined(false)}
+           setJoinFailed(true);
+         } else { setJoinFailed(false)}
     });
   };
 
@@ -147,7 +149,8 @@ function Classes(props) {
               setClassNames([]);
               props.loadUserClasses(loadUserClassesCallback);
               setJoined(true);
-              setAlreadyJoined(false);
+              setJoinFailed(false);
+              setJoinSucceeded(false);
               }
             }}
           >
@@ -160,7 +163,8 @@ function Classes(props) {
               setClassNames([]);
               props.loadAllClasses(loadAllClassesCallback);
               setJoined(false);
-              setAlreadyJoined(false);
+              setJoinFailed(false);
+              setJoinSucceeded(false);
               }
             }}
           >
@@ -193,13 +197,22 @@ function Classes(props) {
             </div>
           </div>
         </div>
-        {alreadyJoined ? (
+        {joinFailed ? (
           <article class="message is-danger">
             <div class="message-body">You're already in this class.</div>
           </article>
         ) : (
           <div></div>
         )}
+        {joinSucceeded ? (
+          <article class="message is-success">
+            <div class="message-body">You're now in this class!</div>
+          </article>
+        ) : (
+          <div></div>
+        )
+
+        }
         <React.Fragment>{createClasses(classes)}</React.Fragment>
       </article>
     </div>

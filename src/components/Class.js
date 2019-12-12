@@ -9,8 +9,9 @@ function Class(props) {
          const status = await props.joinClass(props.currentUser, props.class);
          console.log(status);
          if (status === 400 ) {
-           props.setAlreadyJoined(true);
-         } else { props.setAlreadyJoined(false)}
+           props.setJoinFailed(true);
+           props.setJoinSucceeded(false);
+         } else { props.setJoinFailed(false); props.setJoinSucceeded(true)}
         } else {
           props.getClass(props.class.name, result => {
             props.setClass(result.data.result);
