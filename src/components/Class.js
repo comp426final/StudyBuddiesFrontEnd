@@ -4,22 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Class(props) {
   const content = (
     <a
-      onClick={ async () => {
-        if (!props.joined) {
-         const status = await props.joinClass(props.currentUser, props.class);
-         console.log(status);
-         if (status === 400 ) {
-           props.setJoinFailed(true);
-           props.setJoinSucceeded(false);
-         } else { props.setJoinFailed(false); props.setJoinSucceeded(true)}
-        } else {
-          props.getClass(props.class.name, result => {
-            props.setClass(result.data.result);
-            props.setActive(props.id);
-            
-          });
-        }
-      }}
+      onClick={ () => {
+        props.setClass(props.class);
+        props.setActive(props.id);
+
+      }
+    
+    }
       className={`panel-block ${props.id === props.active ? "is-active" : ""} `}
     >
       <span className="panel-icon">
@@ -27,7 +18,7 @@ function Class(props) {
           <FontAwesomeIcon icon={props.joined ? "book" : `sign-in-alt`} />
         </React.Fragment>
       </span>
-      {props.class.name}
+      {props.class.dep} {props.class.name}
     </a>
   );
   return content;

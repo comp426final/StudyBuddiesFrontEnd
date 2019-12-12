@@ -7,20 +7,24 @@ function AddClass(props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [department, setDepartment] = useState("");
+  const [number, setNumber] = useState("");
   const [validClass, setValidClass] = useState("info");
+  const [validDep, setValidDep] = useState("info");
 
   // API requests
   async function checkClass(name, callback) {
-    const response = await axios({
-      method: "post",
-      url: `http://${props.root}/public/checkClass`,
-      data: {
-        data: { name: name }
+    try {
+      const response = await axios({
+        method: "get",
+        url: `http://${props.root}/public/classes/${name}`
+      });
+      if (callback) {
+        callback(response);
       }
-    });
-    console.log(response);
-    if (callback) {
-      callback(response);
+    } catch (err) {
+      if (err.response.status === 404) {
+        callback(err.response);
+      }
     }
   }
 
@@ -32,10 +36,10 @@ function AddClass(props) {
         data: {
           name: name,
           dep: dep.toUpperCase(),
+          number: number,
           description: description,
           messages: [],
-          members: []
-        },
+        }
       }
     });
     if (callback) {
@@ -47,15 +51,15 @@ function AddClass(props) {
   const nameHandler = event => {
     const val = event.target.value;
     if (val.includes(" ") || val.includes("/")) {
-      setValidClass("warning");
+      setValidClass("danger");
     } else {
       checkClass(val, response => {
         if (val.length === 0) {
-          setValidClass("primary");
-        } else if (response.status === 200) {
+          setValidClass("info");
+        } else if (response.status === 404) {
           setValidClass("success");
         } else {
-          setValidClass("danger");
+          setValidClass("warning");
         }
       });
       setName(val);
@@ -67,8 +71,22 @@ function AddClass(props) {
     setDescription(val);
   };
 
+  const numberHandler = event => {
+    const val = event.target.value;
+    setNumber(val);
+  };
+
   const departmentHandler = event => {
     const val = event.target.value;
+    if (val.includes(" ") || val.includes("/") || val.length > 4) {
+      setValidDep("danger");
+    } else {
+      if (val.length === 0) {
+        setValidDep("info");
+      } else {
+        setValidDep("success");
+      }
+    }
     setDepartment(val);
   };
 
@@ -81,7 +99,7 @@ function AddClass(props) {
 
   const onExitHandler = () => {
     props.setEditing(false);
-  }
+  };
 
   const content = (
     <div className="section is-dark">
@@ -98,7 +116,7 @@ function AddClass(props) {
               <DebounceInput
                 className={`input is-${validClass}`}
                 minLength={0}
-                debounceTimeout={300}
+                debounceTimeout={400}
                 onChange={nameHandler}
                 type="text"
                 placeholder="Class Name"
@@ -107,24 +125,40 @@ function AddClass(props) {
             <p className={`help is-${validClass}`}>
               {validClass === "success"
                 ? "Class name is available."
-                : validClass === "warning"
-                ? "Class name is invalid."
                 : validClass === "danger"
+                ? "Class name is invalid."
+                : validClass === "warning"
                 ? "Class name is not available."
                 : ""}
             </p>
           </div>
-
+          <div className="field">
+            <label className="label">Class Number</label>
+            <div className="control">
+              <input
+                className="input is-info"
+                onChange={numberHandler}
+                placeholder="Write a short description here"
+              />
+            </div>
+          </div>
           <div className="field">
             <label className="label">Department</label>
             <div className="control ">
               <input
-                className="input is-info"
+                className={`input is-${validDep}`}
                 type="text"
                 placeholder="Department"
                 onChange={departmentHandler}
               />
             </div>
+            <p className={`help is-${validDep}`}>
+              {validDep === "success"
+                ? "Department code is valid."
+                : validDep === "danger"
+                ? "Department code is invalid."
+                : ""}
+            </p>
           </div>
 
           <div className="field">

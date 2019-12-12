@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import "./css/sticky.css";
+import "./css/extraStyles.css";
 import "./css/styles.css";
 import Classes from "./components/Classes";
 import Messages from "./components/Messages";
@@ -23,7 +23,6 @@ function App() {
   const [currentToken, setCurrentToken] = useState("");
 
   const root = "comp426-finalapi.herokuapp.com";
-
 
   // comp426-finalapi.herokuapp.com localhost:3001
 
@@ -53,7 +52,7 @@ function App() {
         Authorization: `Bearer ${currentToken}`
       }
     });
-    if ( callback ) {
+    if (callback) {
       callback(result);
     }
     return result;
@@ -86,14 +85,11 @@ function App() {
       done += 1;
       if (callback && done === response.data.result.length) {
         callback(classes);
-        setClasses(classes)
       }
     });
     if (callback && 0 === response.data.result.length) {
       callback(classes);
-      setClasses(classes)
     }
-    
 
     return classes;
   }
@@ -111,6 +107,40 @@ function App() {
     }
   }
 
+  async function leaveClass(user, _class, callback) {
+    if (
+      user.data.classes.filter(classEl => {
+        if (_class.name === classEl) {
+          return true;
+        }
+      }).length !== 0
+    ) {
+     let oldClasses = user.data.classes.slice(0);
+     oldClasses.splice(oldClasses.indexOf(_class.name), 1);
+
+      const response = await axios({
+        method: "post",
+        url: `http://${root}/user/data/data/classes`,
+        data: {
+          data: oldClasses,
+        },
+        headers: {
+          Authorization: `Bearer ${currentToken}`
+        }
+      });
+      if (callback) {
+        callback(response);
+      }
+
+      updateUser(currentToken, result => {
+        setUser(result.data.result);
+      });
+    } else {
+      console.log("already removed");
+      return 400;
+    }
+  }
+
   async function joinClass(user, _class, callback) {
     if (
       user.data.classes.filter(classEl => {
@@ -119,18 +149,7 @@ function App() {
         }
       }).length === 0
     ) {
-      let response = await axios({
-        method: "post",
-        url: `http://${root}/public/classes/${_class.name}/members`,
-        data: {
-          data: [user],
-          type: "merge"
-        }
-      });
-      if (callback) {
-        callback(response);
-      }
-      response = await axios({
+      const response = await axios({
         method: "post",
         url: `http://${root}/user/data/data/classes`,
         data: {
@@ -149,20 +168,20 @@ function App() {
         setUser(result.data.result);
       });
     } else {
-      console.log("already joined")
-      return(400);
+      console.log("already joined");
+      return 400;
     }
   }
 
   // Other Helpers
-  
+
   async function onNewMessage() {
-    getClass(currentClass.name, (result) => {
+    getClass(currentClass.name, result => {
       setClass(result.data.result);
-    })
-    loadUserClasses(result=>{
-      setClasses(result)
-    })
+    });
+    loadUserClasses(result => {
+      setClasses(result);
+    });
   }
 
   let content = loading ? (
@@ -176,9 +195,7 @@ function App() {
       <section className="hero is-info">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title has-text-centered"> 
-              Study Buddies
-            </h1>
+            <h1 className="title has-text-centered">Study Buddies</h1>
           </div>
         </div>
       </section>
@@ -195,16 +212,15 @@ function App() {
                 setClass={setClass}
                 currentClass={currentClass}
                 currentUser={currentUser}
-                joinClass={joinClass}
               />
             </React.Fragment>
           </div>
           <div className="column is-half">
             <div className="section">
               <React.Fragment>
-                <CurrentClass class={currentClass}/>
+                <CurrentClass class={currentClass} joinClass={joinClass} leaveClass={leaveClass} user={currentUser}/>
                 <EditMessage
-                onNewMessage={onNewMessage}
+                  onNewMessage={onNewMessage}
                   currentToken={currentToken}
                   root={root}
                   content={"Send a message!"}

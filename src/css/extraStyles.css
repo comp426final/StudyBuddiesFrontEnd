@@ -1,0 +1,16 @@
+.edit-message{
+    z-index: 3;
+    position: -webkit-sticky;
+  position: sticky;
+  bottom: 1rem;
+  }
+
+/* ul.react-autocomplete-input {
+  
+}
+ul.react-autocomplete-input > li{
+
+}
+ul.react-autocomplete-input > li.active{
+
+} */

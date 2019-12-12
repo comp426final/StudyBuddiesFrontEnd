@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Classes(props) {
   const [joined, setJoined] = useState(true);
-  const [joinFailed, setJoinFailed] = useState(false);
-  const [joinSucceeded, setJoinSucceeded] = useState(false);
   const [classes, setClasses] = useState([]);
   const [classNames, setClassNames] = useState([]);
   const [editing, setEditing] = useState(false);
@@ -25,6 +23,7 @@ function Classes(props) {
   }, [classes]);
 
   useEffect(() => {
+    setActive(-1);
     props.loadUserClasses(loadUserClassesCallback);
   }, []);
 
@@ -32,18 +31,12 @@ function Classes(props) {
   const createClass = _class => {
     return (
       <Class
-        setJoinFailed={setJoinFailed}
-        setJoinSucceeded={setJoinSucceeded}
-        getClass={props.getClass}
-        currentUser={props.currentUser}
         key={classes.indexOf(_class)}
         id={classes.indexOf(_class)}
         class={_class}
         setClass={props.setClass}
-        joinClass={props.joinClass}
         active={active}
         setActive={setActive}
-        joined={joined}
       />
     );
   };
@@ -54,18 +47,13 @@ function Classes(props) {
       return classes.map(createClass);
     } else {
       return (
-        <div className="content has-text-centered has-icons-left">
-          <span className="icon is-left">
-            <React.Fragment>
-              <FontAwesomeIcon icon="exclamation-triangle" />
-            </React.Fragment>
-          </span>
-          <p>
+        <article class="message is-danger ">
+          <div class="message-body">
             {joined
               ? "Oops! You haven't joined any classes!"
               : "Oops! There are no more classes. Create one!"}
-          </p>
-        </div>
+          </div>
+        </article>
       );
     }
   };
@@ -74,16 +62,11 @@ function Classes(props) {
 
   function loadAllClassesCallback(result) {
     let val = [];
-    console.log(result);
     var keys = Object.keys(result.data.result);
     keys.forEach(function(key) {
       val.push(result.data.result[key]);
     });
     setClasses(val);
-    console.log(val);
-
-    props.setClass(val[0]);
-    setActive(0);
   }
 
   function loadUserClassesCallback(result) {
@@ -93,9 +76,6 @@ function Classes(props) {
       val.push(result[key]);
     });
     setClasses(val);
-    console.log(val);
-    props.setClass(val[0]);
-    setActive(0);
   }
 
   function editingHandler(event) {
@@ -108,10 +88,7 @@ function Classes(props) {
 
   const onSearchSubmit = () => {
     props.getClass(finding, async result => {
-      const status = await props.joinClass(props.currentUser, result.data.result);
-         if (status === 400 ) {
-           setJoinFailed(true);
-         } else { setJoinFailed(false)}
+      props.setClass(result.data.result);
     });
   };
 
@@ -145,12 +122,10 @@ function Classes(props) {
           <a
             className={`${joined ? "is-active" : ""}`}
             onClick={() => {
-              if ( !joined ) {
-              setClassNames([]);
-              props.loadUserClasses(loadUserClassesCallback);
-              setJoined(true);
-              setJoinFailed(false);
-              setJoinSucceeded(false);
+              if (!joined) {
+                setClassNames([]);
+                props.loadUserClasses(loadUserClassesCallback);
+                setJoined(true);
               }
             }}
           >
@@ -159,12 +134,10 @@ function Classes(props) {
           <a
             className={`${joined ? "" : "is-active"}`}
             onClick={() => {
-              if ( joined ) {
-              setClassNames([]);
-              props.loadAllClasses(loadAllClassesCallback);
-              setJoined(false);
-              setJoinFailed(false);
-              setJoinSucceeded(false);
+              if (joined) {
+                setClassNames([]);
+                props.loadAllClasses(loadAllClassesCallback);
+                setJoined(false);
               }
             }}
           >
@@ -190,29 +163,14 @@ function Classes(props) {
               <button className="button is-info" onClick={onSearchSubmit}>
                 <React.Fragment>
                   <FontAwesomeIcon
-                    icon={props.joined ? "book" : `sign-in-alt`}
+                    icon={"search"}
                   />
                 </React.Fragment>
               </button>
             </div>
           </div>
         </div>
-        {joinFailed ? (
-          <article class="message is-danger">
-            <div class="message-body">You're already in this class.</div>
-          </article>
-        ) : (
-          <div></div>
-        )}
-        {joinSucceeded ? (
-          <article class="message is-success">
-            <div class="message-body">You're now in this class!</div>
-          </article>
-        ) : (
-          <div></div>
-        )
 
-        }
         <React.Fragment>{createClasses(classes)}</React.Fragment>
       </article>
     </div>

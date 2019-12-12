@@ -22,7 +22,7 @@ function LandingPage(props) {
     if (password.length > 7) {
       setValidPass("success");
     } else if (password.length === 0) {
-      setValidPass("primary");
+      setValidPass("info");
     } else {
       setValidPass("danger");
     }
@@ -39,7 +39,7 @@ function LandingPage(props) {
           }
         });
       } else if (username.length === 0) {
-        setValidUser("primary");
+        setValidUser("info");
       }
     } else {
       if (username.length > 0) {
@@ -51,7 +51,7 @@ function LandingPage(props) {
           }
         });
       } else if (username.length === 0) {
-        setValidUser("primary");
+        setValidUser("info");
       }
     }
   }, [username]);
@@ -198,15 +198,15 @@ function LandingPage(props) {
     <div className="App">
       <section className="hero is-info">
         <div className="hero-body">
-          <div class="container">
-            <h1 class="title has-text-centered">Study Buddies</h1>
+          <div className="container">
+            <h1 className="title has-text-centered">Study Buddies</h1>
           </div>
         </div>
       </section>
       <section className="section columns">
         <section className="section columns">
             <div className="box column">
-              <figure class="image">
+              <figure className="image">
                 <img src="http://clipart-library.com/img1/867625.jpg"></img>
               </figure>
             </div>
@@ -256,8 +256,8 @@ function LandingPage(props) {
               </ul>
             </div>
             {loginFailed ? (
-              <article class="message is-danger">
-                <div class="message-body">Login failed.</div>
+              <article className="message is-danger">
+                <div className="message-body">Login failed.</div>
               </article>
             ) : (
               <div></div>
@@ -303,7 +303,7 @@ function LandingPage(props) {
               <div className="control has-icons-left has-icons-right">
                 <DebounceInput
                   minLength={1}
-                  debounceTimeout={300}
+                  debounceTimeout={400}
                   onChange={onPasswordChange}
                   className={`input is-${validPass}`}
                   type="password"
@@ -340,7 +340,7 @@ function LandingPage(props) {
             <nav className="level">
               <div className="level-left">
                 <div className="field">
-                  <button className="button level-item" onClick={onSignUp}>
+                  <button className="button level-item is-info" onClick={onSignUp}>
                     Sign up
                   </button>
                 </div>
@@ -351,7 +351,7 @@ function LandingPage(props) {
                     clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
                     render={renderProps => (
                       <button
-                        className="button level-item"
+                        className="button level-item is-success"
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
                       >
@@ -370,7 +370,7 @@ function LandingPage(props) {
             <nav className="level">
               <div className="level-left">
                 <div className="field">
-                  <button className="button level-item" onClick={onLogIn}>
+                  <button className="button level-item is-info" onClick={onLogIn}>
                     Log in
                   </button>
                 </div>
@@ -381,7 +381,7 @@ function LandingPage(props) {
                     clientId="1094624501428-i10otiook503amuvr05dqjsvuop4pq8q.apps.googleusercontent.com"
                     render={renderProps => (
                       <button
-                        className="button level-item"
+                        className="button level-item is-success"
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
                       >
