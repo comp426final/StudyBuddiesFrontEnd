@@ -11,23 +11,19 @@ import LandingPage from "./components/LandingPage";
 import EditMessage from "./components/EditMessage";
 
 import axios from "axios";
-<<<<<<< HEAD
-import EditAnnouncement from "./components/EditAnnouncement";
-=======
 import CurrentClass from "./components/CurrentClass";
->>>>>>> 5f39e80343041e3a09f2eaba37f04cfcc36335b2
+import EditAnnouncement from './components/EditAnnouncement';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleUser, setGoogleUser] = useState(false);
   const [currentUser, setUser] = useState([]);
-  const [currentClass, setClass] = useState("");
+  const [currentClass, setClass, setAnnoucement] = useState("");
   const [currentClasses, setClasses] = useState("");
-  const [setAnnoucement] = useState("");
   const [currentToken, setCurrentToken] = useState("");
 
-  const root = "localhost:3001";
+  const root = "comp426-finalapi.herokuapp.com";
 
 
   // comp426-finalapi.herokuapp.com localhost:3001
@@ -42,6 +38,8 @@ function App() {
     setUser(props.data);
 
     updateUser(props.data.jwt, result => {
+      setClass(result.data.result.data.classes[0]);
+      setClasses(result.data.result.data.classes);
       setUser(result.data.result);
       setLoggedIn(true);
       setLoading(false);
@@ -58,7 +56,7 @@ function App() {
         Authorization: `Bearer ${currentToken}`
       }
     });
-    if (callback) {
+    if ( callback ) {
       callback(result);
     }
     return result;
@@ -88,7 +86,6 @@ function App() {
     }
   }
 
-
   async function loadUserClasses(callback) {
     let classes = [];
     const response = await axios({
@@ -98,6 +95,7 @@ function App() {
         Authorization: `Bearer ${currentToken}`
       }
     });
+
 
     let done = 0;
     await response.data.result.forEach(async element => {
@@ -113,7 +111,7 @@ function App() {
       callback(classes);
       setClasses(classes)
     }
-
+    
 
     return classes;
   }
@@ -175,16 +173,17 @@ function App() {
   }
 
   // Other Helpers
-
+  
   async function onNewMessage() {
     getClass(currentClass.name, (result) => {
       setClass(result.data.result);
     })
-    loadUserClasses(result => {
+    loadUserClasses(result=>{
       setClasses(result)
     })
   }
 
+  
   async function onNewAnnouncement() {
     getAnnouncements(currentClass.announcements, (result) => {
       setAnnoucement(result.data.result);
@@ -202,7 +201,7 @@ function App() {
       <section className="hero is-info">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title has-text-centered">
+            <h1 className="title has-text-centered"> 
               Study Buddies
             </h1>
           </div>
@@ -230,7 +229,7 @@ function App() {
               <React.Fragment>
                 <CurrentClass class={currentClass}/>
                 <EditMessage
-                  onNewMessage={onNewMessage}
+                onNewMessage={onNewMessage}
                   currentToken={currentToken}
                   root={root}
                   content={"Send a message!"}
@@ -259,7 +258,7 @@ function App() {
               />
             </React.Fragment>
             </div>
-          </div>
+        </div>
         </div>
       </section>
       <section className="section is-marginless is-paddingless">
@@ -283,8 +282,8 @@ function App() {
                     />
                   </React.Fragment>
                 ) : (
-                    <button className="button">Logout</button>
-                  )}
+                  <button className="button">Logout</button>
+                )}
               </div>
             </div>
           </div>
@@ -292,17 +291,17 @@ function App() {
       </section>
     </div>
   ) : (
-        <React.Fragment>
-          <LandingPage
-            loading={loading}
-            setLoading={setLoading}
-            root={root}
-            logInCallback={logInCallback}
-            setUser={setUser}
-            setGoogleUser={setGoogleUser}
-          />
-        </React.Fragment>
-      );
+    <React.Fragment>
+      <LandingPage
+        loading={loading}
+        setLoading={setLoading}
+        root={root}
+        logInCallback={logInCallback}
+        setUser={setUser}
+        setGoogleUser={setGoogleUser}
+      />
+    </React.Fragment>
+  );
 
   return content;
 }
