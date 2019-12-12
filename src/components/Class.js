@@ -4,9 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Class(props) {
   const content = (
     <a
-      onClick={() => {
+      onClick={ async () => {
         if (!props.joined) {
-          props.joinClass(props.currentUser, props.class);
+         const status = await props.joinClass(props.currentUser, props.class);
+         console.log(status);
+         if (status === 400 ) {
+           props.setAlreadyJoined(true);
+         } else { props.setAlreadyJoined(false)}
         } else {
           props.getClass(props.class.name, result => {
             props.setClass(result.data.result);

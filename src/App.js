@@ -11,6 +11,7 @@ import LandingPage from "./components/LandingPage";
 import EditMessage from "./components/EditMessage";
 
 import axios from "axios";
+import CurrentClass from "./components/CurrentClass";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -113,10 +114,9 @@ function App() {
   }
 
   async function joinClass(user, _class, callback) {
-
     if (
       user.data.classes.filter(classEl => {
-        if (_class.name === classEl.name) {
+        if (_class.name === classEl) {
           return true;
         }
       }).length === 0
@@ -130,7 +130,7 @@ function App() {
         }
       });
       if (callback) {
-        callback(response.data.result);
+        callback(response);
       }
       response = await axios({
         method: "post",
@@ -144,14 +144,15 @@ function App() {
         }
       });
       if (callback) {
-        callback(response.data.result);
+        callback(response);
       }
 
       updateUser(currentToken, result => {
         setUser(result.data.result);
       });
     } else {
-      console.log("already joined");
+      console.log("already joined")
+      return(400);
     }
   }
 
@@ -203,6 +204,7 @@ function App() {
           <div className="column is-half">
             <div className="section">
               <React.Fragment>
+                <CurrentClass class={currentClass}/>
                 <EditMessage
                 onNewMessage={onNewMessage}
                   currentToken={currentToken}

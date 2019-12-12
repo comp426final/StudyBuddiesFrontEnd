@@ -6,30 +6,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Classes(props) {
   const [joined, setJoined] = useState(true);
+  const [alreadyJoined, setAlreadyJoined] = useState(false);
   const [classes, setClasses] = useState([]);
   const [classNames, setClassNames] = useState([]);
   const [editing, setEditing] = useState(false);
   const [active, setActive] = useState(0);
-  const [finding, setFinding] = useState("")
+  const [finding, setFinding] = useState("");
 
   useEffect(() => {
     let names = [];
-    classes.forEach( (clss) => {
+    classes.forEach(clss => {
       names.push(clss.name);
-    })
+    });
     setClassNames(names);
     console.log(classes);
     console.log(names);
   }, [classes]);
 
-  useEffect (() => {
+  useEffect(() => {
     props.loadUserClasses(loadUserClassesCallback);
-  }, [])
+  }, []);
 
   // This function and the next function are used to transform the retrieved tweets into react components.
   const createClass = _class => {
     return (
       <Class
+        setAlreadyJoined={setAlreadyJoined}
         getClass={props.getClass}
         currentUser={props.currentUser}
         key={classes.indexOf(_class)}
@@ -70,6 +72,7 @@ function Classes(props) {
 
   function loadAllClassesCallback(result) {
     let val = [];
+    console.log(result);
     var keys = Object.keys(result.data.result);
     keys.forEach(function(key) {
       val.push(result.data.result[key]);
@@ -98,14 +101,17 @@ function Classes(props) {
   }
 
   const onSearchChange = event => {
-  setFinding(event);
-  }
+    setFinding(event);
+  };
 
   const onSearchSubmit = () => {
-    props.getClass(finding,(result) => {
-      props.setClass(result.data.result);
-    })
-  }
+    props.getClass(finding, async result => {
+      const status = await props.joinClass(props.currentUser, result.data.result);
+         if (status === 400 ) {
+           setAlreadyJoined(true);
+         } else { setAlreadyJoined(false)}
+    });
+  };
 
   const content = editing ? (
     <div>
@@ -113,8 +119,8 @@ function Classes(props) {
         <AddClass
           root={props.root}
           setEditing={setEditing}
-          loadAllClassesCallback={loadUserClassesCallback}
-          loadAllClasses={loadAllClassesCallback}
+          loadAllClassesCallback={loadAllClassesCallback}
+          loadAllClasses={props.loadAllClasses}
         />
       </React.Fragment>
     </div>
@@ -137,9 +143,11 @@ function Classes(props) {
           <a
             className={`${joined ? "is-active" : ""}`}
             onClick={() => {
-              setClassNames([])
+              if ( !joined ) {
+              setClassNames([]);
               props.loadUserClasses(loadUserClassesCallback);
               setJoined(true);
+              }
             }}
           >
             Joined
@@ -147,9 +155,11 @@ function Classes(props) {
           <a
             className={`${joined ? "" : "is-active"}`}
             onClick={() => {
-              setClassNames([])
+              if ( joined ) {
+              setClassNames([]);
               props.loadAllClasses(loadAllClassesCallback);
               setJoined(false);
+              }
             }}
           >
             Search
@@ -173,12 +183,21 @@ function Classes(props) {
             <div className="control">
               <button className="button is-info" onClick={onSearchSubmit}>
                 <React.Fragment>
-                  <FontAwesomeIcon icon={props.joined ? "book" : `sign-in-alt`} />
+                  <FontAwesomeIcon
+                    icon={props.joined ? "book" : `sign-in-alt`}
+                  />
                 </React.Fragment>
               </button>
             </div>
           </div>
         </div>
+        {alreadyJoined ? (
+          <article class="message is-danger">
+            <div class="message-body">You're already in this class.</div>
+          </article>
+        ) : (
+          <div></div>
+        )}
         <React.Fragment>{createClasses(classes)}</React.Fragment>
       </article>
     </div>
