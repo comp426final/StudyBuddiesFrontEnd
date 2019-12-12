@@ -18,6 +18,7 @@ function EditMessage(props) {
       message,
       response => {
         props.onNewMessage();
+        setMessage("");
       }
     );
   }
@@ -45,6 +46,7 @@ function EditMessage(props) {
           type="text"
           placeholder="Send a message!"
           onChange={msgHelper}
+          value={message}
         />
       </p>
       <p className="control">
