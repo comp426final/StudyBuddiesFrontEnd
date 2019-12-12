@@ -7,7 +7,7 @@ function AddClass(props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [department, setDepartment] = useState("");
-  const [validClass, setValidClass] = useState("primary");
+  const [validClass, setValidClass] = useState("info");
 
   // API requests
   async function checkClass(name, callback) {
@@ -84,7 +84,7 @@ function AddClass(props) {
 
   const content = (
     <div className="section is-dark">
-      <article className="panel is-primary content">
+      <article className="panel is-info content">
         <div className="panel-heading level">
           <div className="level-left">
             <p className="level-item">Classes</p>
@@ -118,7 +118,7 @@ function AddClass(props) {
             <label className="label">Department</label>
             <div className="control ">
               <input
-                className="input is-primary"
+                className="input is-info"
                 type="text"
                 placeholder="Department"
                 onChange={departmentHandler}
@@ -130,7 +130,7 @@ function AddClass(props) {
             <label className="label">Description</label>
             <div className="control">
               <textarea
-                className="textarea is-primary"
+                className="textarea is-info"
                 onChange={descriptionHandler}
                 placeholder="Write a short description here"
               />

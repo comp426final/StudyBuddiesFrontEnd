@@ -158,7 +158,7 @@ function Classes(props) {
               <React.Fragment>
                 <TextInput
                   options={classNames}
-                  className="input is-primary"
+                  className="input is-info"
                   placeholder="Search"
                   Component="input"
                   trigger=""
@@ -168,7 +168,7 @@ function Classes(props) {
               </React.Fragment>
             </div>
             <div className="control">
-              <button className="button is-primary" onClick={onSearchSubmit}>
+              <button className="button is-info" onClick={onSearchSubmit}>
                 <React.Fragment>
                   <FontAwesomeIcon icon={props.joined ? "book" : `sign-in-alt`} />
                 </React.Fragment>
