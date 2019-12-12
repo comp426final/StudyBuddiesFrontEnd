@@ -147,6 +147,7 @@ function Classes(props) {
               setClassNames([]);
               props.loadUserClasses(loadUserClassesCallback);
               setJoined(true);
+              setAlreadyJoined(false);
               }
             }}
           >
@@ -159,6 +160,7 @@ function Classes(props) {
               setClassNames([]);
               props.loadAllClasses(loadAllClassesCallback);
               setJoined(false);
+              setAlreadyJoined(false);
               }
             }}
           >

@@ -31,7 +31,7 @@ function AddClass(props) {
       data: {
         data: {
           name: name,
-          dep: dep.toUpperCase,
+          dep: dep.toUpperCase(),
           description: description,
           messages: [],
           members: []

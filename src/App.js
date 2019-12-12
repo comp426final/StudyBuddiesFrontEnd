@@ -37,8 +37,6 @@ function App() {
     setUser(props.data);
 
     updateUser(props.data.jwt, result => {
-      setClass(result.data.result.data.classes[0]);
-      setClasses(result.data.result.data.classes);
       setUser(result.data.result);
       setLoggedIn(true);
       setLoading(false);
