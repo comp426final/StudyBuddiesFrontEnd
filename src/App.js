@@ -12,13 +12,14 @@ import EditMessage from "./components/EditMessage";
 
 import axios from "axios";
 import CurrentClass from "./components/CurrentClass";
+import EditAnnouncement from './components/EditAnnouncement';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleUser, setGoogleUser] = useState(false);
   const [currentUser, setUser] = useState([]);
-  const [currentClass, setClass] = useState("");
+  const [currentClass, setClass, setAnnoucement] = useState("");
   const [currentClasses, setClasses] = useState("");
   const [currentToken, setCurrentToken] = useState("");
 
@@ -36,6 +37,8 @@ function App() {
     setUser(props.data);
 
     updateUser(props.data.jwt, result => {
+      setClass(result.data.result.data.classes[0]);
+      setClasses(result.data.result.data.classes);
       setUser(result.data.result);
       setLoggedIn(true);
       setLoading(false);
@@ -48,6 +51,20 @@ function App() {
     const result = await axios({
       method: "get",
       url: `http://${root}/public/classes/${element}`,
+      headers: {
+        Authorization: `Bearer ${currentToken}`
+      }
+    });
+    if (callback) {
+      callback(result);
+    }
+    return result;
+  }
+
+  async function getAnnouncements(element, callback) {
+    const result = await axios({
+      method: "get",
+      url: `http://${root}/public/classes/${element}/announcements`,
       headers: {
         Authorization: `Bearer ${currentToken}`
       }
@@ -77,6 +94,7 @@ function App() {
         Authorization: `Bearer ${currentToken}`
       }
     });
+
 
     let done = 0;
     await response.data.result.forEach(async element => {
@@ -184,6 +202,13 @@ function App() {
     });
   }
 
+  
+  async function onNewAnnouncement() {
+    getAnnouncements(currentClass.announcements, (result) => {
+      setAnnoucement(result.data.result);
+    })
+  }
+
   let content = loading ? (
     <div className="App">
       <section className="hero is-info">
@@ -235,10 +260,21 @@ function App() {
           </div>
 
           <div className="column is-quarter">
+            <div className="section">
             <React.Fragment>
-              <Announcements announcements={[]} />
+              <EditAnnouncement
+                  onNewAnnouncement={onNewAnnouncement}
+                  currentClass={currentClass}
+                  currentToken={currentToken}
+                  currentUser={currentUser}
+                  content={"Send an announcement!"}
+                  root={root}       
+                  />
+              <Announcements announcements={currentClass ? currentClass.announcements : []} 
+              />
             </React.Fragment>
-          </div>
+            </div>
+        </div>
         </div>
       </section>
       <section className="section is-marginless is-paddingless">

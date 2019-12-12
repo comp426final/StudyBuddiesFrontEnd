@@ -1,5 +1,6 @@
 import React, {  } from "react";
 import Announcement from "./Announcement";
+import Message from "./Message";
 // import axios from "axios";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -11,6 +12,7 @@ function Announcements (props) {
       <Announcement
         key={announcement.id}
         content={announcement.content}
+        author={announcement.author}
       />
     );
   };
