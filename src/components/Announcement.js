@@ -7,7 +7,7 @@ function Announcement(props) {
     <article className={`message is-${props.announcement.color}`}>
       <div className="message-header">
           <strong>Posted By {props.announcement.author}</strong>
-          {props.user.name === props.announcement.author ? 
+          { (props.user.name === props.announcement.author && props.user.data.classes.includes(props.class.name)) ? 
         <button
           class="delete"
           onClick={() => {

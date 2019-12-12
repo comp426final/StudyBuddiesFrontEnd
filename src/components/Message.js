@@ -35,7 +35,7 @@ function Message(props) {
         </nav>
       </div>
       <div className="media-right">
-        {props.user.name === props.message.author ? 
+        { (props.user.name === props.message.author) && (props.user.data.classes.includes(props.class.name)) ? 
         <button
           class="delete"
           onClick={() => {

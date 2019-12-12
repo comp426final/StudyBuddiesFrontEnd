@@ -27,9 +27,11 @@ function CurrentClass(props) {
       setLeaveFailed(true);
       setLeaveSucceeded(false);
     } else {
+      setJoined(false);
       setLeaveFailed(false);
       setLeaveSucceeded(true);
     }
+  
   }
   async function onJoinClass() {
     const status = await props.joinClass(props.user, props.class);
@@ -37,6 +39,7 @@ function CurrentClass(props) {
       setJoinFailed(true);
       setJoinSucceeded(false);
     } else {
+      setJoined(true)
       setJoinFailed(false);
       setJoinSucceeded(true);
     }
@@ -58,29 +61,20 @@ function CurrentClass(props) {
           <div class="card-content">
             <div class="content">
               {props.class.description}
-              <br />
               {joinFailed ? (
                 <article class="message is-danger">
                   <div class="message-body">You're already in this class.</div>
                 </article>
-              ) : (
-                <div></div>
-              )}
-              {joinSucceeded ? (
+              ) : 
+              joinSucceeded ? (
                 <article class="message is-success">
                   <div class="message-body">You're now in this class!</div>
                 </article>
-              ) : (
-                <div></div>
-              )}
-              {leaveFailed ? (
+              ) : leaveFailed ? (
                 <article class="message is-danger">
                   <div class="message-body">You're already not in this class.</div>
                 </article>
-              ) : (
-                <div></div>
-              )}
-              {leaveSucceeded ? (
+              ) : leaveSucceeded ? (
                 <article class="message is-success">
                   <div class="message-body">You're no longer in this class!</div>
                 </article>
