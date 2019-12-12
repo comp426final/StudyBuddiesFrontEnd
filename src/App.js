@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState } from "react";
 
 import "./css/sticky.css";
 import "./css/styles.css";
@@ -79,6 +79,7 @@ function App() {
         Authorization: `Bearer ${currentToken}`
       }
     });
+
     let done = 0;
     await response.data.result.forEach(async element => {
       let result = await getClass(element);
@@ -89,7 +90,10 @@ function App() {
         setClasses(classes)
       }
     });
-
+    if (callback && 0 === response.data.result.length) {
+      callback(classes);
+      setClasses(classes)
+    }
     
 
     return classes;

@@ -18,11 +18,11 @@ function Classes(props) {
       names.push(clss.name);
     })
     setClassNames(names);
+    console.log(names);
   }, [classes]);
 
   useEffect (() => {
     props.loadUserClasses(loadUserClassesCallback);
-
   }, [])
 
   // This function and the next function are used to transform the retrieved tweets into react components.
@@ -74,6 +74,8 @@ function Classes(props) {
       val.push(result.data.result[key]);
     });
     setClasses(val);
+    console.log(val);
+
     props.setClass(val[0]);
     setActive(0);
   }
@@ -85,6 +87,7 @@ function Classes(props) {
       val.push(result[key]);
     });
     setClasses(val);
+    console.log(val);
     props.setClass(val[0]);
     setActive(0);
   }
