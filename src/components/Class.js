@@ -15,10 +15,10 @@ function Class(props) {
     >
       <span className="panel-icon">
         <React.Fragment>
-          <FontAwesomeIcon icon={props.joined ? "book" : `sign-in-alt`} />
+          <FontAwesomeIcon icon="book" />
         </React.Fragment>
       </span>
-      {props.class.dep} {props.class.name}
+      {props.class.dep} {props.class.number} - {props.class.name}
     </a>
   );
   return content;

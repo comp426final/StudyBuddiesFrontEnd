@@ -1,6 +1,7 @@
 import React, { useState } from "../../node_modules/react";
 import { DebounceInput } from "../..//node_modules/react-debounce-input";
 import axios from "../../node_modules/axios";
+
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function AddClass(props) {
@@ -39,6 +40,7 @@ function AddClass(props) {
           number: number,
           description: description,
           messages: [],
+          announcements: []
         }
       }
     });

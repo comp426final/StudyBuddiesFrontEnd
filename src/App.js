@@ -12,14 +12,14 @@ import EditMessage from "./components/EditMessage";
 
 import axios from "axios";
 import CurrentClass from "./components/CurrentClass";
-import EditAnnouncement from './components/EditAnnouncement';
+import EditAnnouncement from "./components/EditAnnouncement";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleUser, setGoogleUser] = useState(false);
   const [currentUser, setUser] = useState([]);
-  const [currentClass, setClass, setAnnoucement] = useState("");
+  const [currentClass, setClass] = useState("");
   const [currentClasses, setClasses] = useState("");
   const [currentToken, setCurrentToken] = useState("");
 
@@ -37,8 +37,6 @@ function App() {
     setUser(props.data);
 
     updateUser(props.data.jwt, result => {
-      setClass(result.data.result.data.classes[0]);
-      setClasses(result.data.result.data.classes);
       setUser(result.data.result);
       setLoggedIn(true);
       setLoading(false);
@@ -51,20 +49,6 @@ function App() {
     const result = await axios({
       method: "get",
       url: `http://${root}/public/classes/${element}`,
-      headers: {
-        Authorization: `Bearer ${currentToken}`
-      }
-    });
-    if (callback) {
-      callback(result);
-    }
-    return result;
-  }
-
-  async function getAnnouncements(element, callback) {
-    const result = await axios({
-      method: "get",
-      url: `http://${root}/public/classes/${element}/announcements`,
       headers: {
         Authorization: `Bearer ${currentToken}`
       }
@@ -95,7 +79,6 @@ function App() {
       }
     });
 
-
     let done = 0;
     await response.data.result.forEach(async element => {
       let result = await getClass(element);
@@ -124,8 +107,65 @@ function App() {
       callback(response);
     }
   }
+  // async function deleteAnnouncement(_class, announcement, callback) {
+  //   if (currentUser.name === announcement.author.name) {
+  //     let oldAnnouncements = _class.announcements.slice(0);
+  //     oldAnnouncements.splice(oldAnnouncements.indexOf(announcement.id), 1);
+
+  //     let response = await axios({
+  //       method: "post",
+  //       url: `http://${root}/public/classes/${_class.name}/announcements`,
+  //       data: {
+  //         data: oldAnnouncements
+  //       }
+  //     });
+  //     if (callback) {
+  //       callback(response);
+  //     }
+  //     onNewAnnouncement();
+  //   }
+  // }
+  async function deleteAnnouncement(_class, announcement, callback) {
+    if (currentUser.name === announcement.author) {
+      let oldAnnouncements = _class.announcements.slice(0);
+      oldAnnouncements.splice(oldAnnouncements.indexOf(announcement.id), 1);
+
+      let response = await axios({
+        method: "post",
+        url: `http://${root}/public/classes/${_class.name}/announcements`,
+        data: {
+          data: oldAnnouncements
+        }
+      });
+      if (callback) {
+        callback(response);
+      }
+      onNewAnnouncement();
+    }
+  }
+
+  async function deleteMessage(_class, message, callback) {
+    if (currentUser.name === message.author) {
+      let oldMessages = _class.messages.slice(0);
+      oldMessages.splice(oldMessages.indexOf(message.id), 1);
+
+      let response = await axios({
+        method: "post",
+        url: `http://${root}/public/classes/${_class.name}/messages`,
+        data: {
+          data: oldMessages
+        }
+      });
+      if (callback) {
+        callback(response);
+      }
+      onNewMessage();
+    }
+  }
 
   async function leaveClass(user, _class, callback) {
+    let oldClasses = user.data.classes.slice(0);
+    oldClasses.splice(oldClasses.indexOf(_class.name), 1);
     if (
       user.data.classes.filter(classEl => {
         if (_class.name === classEl) {
@@ -133,14 +173,11 @@ function App() {
         }
       }).length !== 0
     ) {
-     let oldClasses = user.data.classes.slice(0);
-     oldClasses.splice(oldClasses.indexOf(_class.name), 1);
-
       const response = await axios({
         method: "post",
         url: `http://${root}/user/data/data/classes`,
         data: {
-          data: oldClasses,
+          data: oldClasses
         },
         headers: {
           Authorization: `Bearer ${currentToken}`
@@ -202,11 +239,14 @@ function App() {
     });
   }
 
-  
   async function onNewAnnouncement() {
-    getAnnouncements(currentClass.announcements, (result) => {
-      setAnnoucement(result.data.result);
-    })
+    getClass(currentClass.name, result => {
+      console.log(result);
+      setClass(result.data.result);
+    });
+    loadUserClasses(result => {
+      setClasses(result);
+    });
   }
 
   let content = loading ? (
@@ -243,7 +283,12 @@ function App() {
           <div className="column is-half">
             <div className="section">
               <React.Fragment>
-                <CurrentClass class={currentClass} joinClass={joinClass} leaveClass={leaveClass} user={currentUser}/>
+                <CurrentClass
+                  class={currentClass}
+                  joinClass={joinClass}
+                  leaveClass={leaveClass}
+                  user={currentUser}
+                />
                 <EditMessage
                   onNewMessage={onNewMessage}
                   currentToken={currentToken}
@@ -254,6 +299,9 @@ function App() {
                 />
                 <Messages
                   messages={currentClass ? currentClass.messages : []}
+                  deleteMessage={deleteMessage}
+                  user={currentUser}
+                  class={currentClass}
                 />
               </React.Fragment>
             </div>
@@ -261,20 +309,24 @@ function App() {
 
           <div className="column is-quarter">
             <div className="section">
-            <React.Fragment>
-              <EditAnnouncement
+              <React.Fragment>
+                <EditAnnouncement
                   onNewAnnouncement={onNewAnnouncement}
                   currentClass={currentClass}
                   currentToken={currentToken}
                   currentUser={currentUser}
                   content={"Send an announcement!"}
-                  root={root}       
-                  />
-              <Announcements announcements={currentClass ? currentClass.announcements : []} 
-              />
-            </React.Fragment>
+                  root={root}
+                />
+                <Announcements
+                  deleteAnnouncement={deleteAnnouncement}
+                  announcements={currentClass ? currentClass.announcements : []}
+                  class={currentClass}
+                  user={currentUser}
+                />
+              </React.Fragment>
             </div>
-        </div>
+          </div>
         </div>
       </section>
       <section className="section is-marginless is-paddingless">

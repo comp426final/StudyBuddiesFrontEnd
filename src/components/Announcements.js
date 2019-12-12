@@ -10,9 +10,11 @@ function Announcements (props) {
   const createAnnouncement = announcement => {
     return (
       <Announcement
+        deleteAnnouncement={props.deleteAnnouncement}
         key={announcement.id}
-        content={announcement.content}
-        author={announcement.author}
+        announcement={announcement}
+        class={props.class}
+        user={props.user}
       />
     );
   };

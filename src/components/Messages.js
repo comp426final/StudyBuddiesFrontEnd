@@ -7,11 +7,14 @@ function Messages (props) {
 
      // This function and the next function are used to transform the retrieved tweets into react components.
   const createMessage = message => {
+    console.log(message);
     return (
       <Message
        key={message.id}
-       content={message.content}
-       author={message.author}
+       message={message}
+       deleteMessage={props.deleteMessage}
+       user={props.user}
+       class={props.class}
       />
     );
   };

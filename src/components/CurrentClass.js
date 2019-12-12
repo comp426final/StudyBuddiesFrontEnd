@@ -15,7 +15,7 @@ function CurrentClass(props) {
     setLeaveFailed(false);
     setLeaveSucceeded(false);
 
-    if ( props.user.data.classes.includes(props.class.name)) {
+    if ( props.class && props.user.data.classes.includes(props.class.name)) {
       setJoined(true);
     } else {
       setJoined(false);
@@ -52,7 +52,7 @@ function CurrentClass(props) {
               <span className="card-header-icon has-text-info has-text-heavy">
                 {props.class.dep}
               </span>
-              {props.class.name}
+              {props.class.number} - {props.class.name}
             </p>
           </header>
           <div class="card-content">
