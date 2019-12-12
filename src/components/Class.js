@@ -11,6 +11,7 @@ function Class(props) {
           props.getClass(props.class.name, result => {
             props.setClass(result.data.result);
             props.setActive(props.id);
+            
           });
         }
       }}

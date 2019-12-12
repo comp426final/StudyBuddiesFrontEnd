@@ -15,6 +15,8 @@ function LandingPage(props) {
 
   const [signUpMode, setSignUpMode] = useState(true);
 
+  const [loginFailed, setLoginFailed] = useState(false);
+
   //Use Effects
   useEffect(() => {
     if (password.length > 7) {
@@ -90,17 +92,25 @@ function LandingPage(props) {
   };
 
   const googleLoginFail = response => {
+    setLoginFailed(true);
     props.setLoading(false);
   };
 
   // Button handlers
   function onSignUp() {
     props.setLoading(true);
-    signUp(username, password, () => {
-      logIn(username, password, result => {
-        console.log("adding user...");
-        addUser(username, result.data.jwt);
-      });
+    signUp(username, password, result => {
+      if (result.status === 200) {
+        logIn(username, password, result => {
+          if (result.status === 200) {
+            addUser(username, result.data.jwt);
+          } else {
+            setLoginFailed(true);
+          }
+        });
+      } else {
+        setLoginFailed(true);
+      }
     });
     props.setLoading(false);
   }
@@ -164,6 +174,7 @@ function LandingPage(props) {
   }
 
   async function logIn(name, pass, callback) {
+    try{
     const response = await axios({
       method: "post",
       url: `http://${props.root}/account/login`,
@@ -176,6 +187,11 @@ function LandingPage(props) {
       callback(response);
     }
     props.logInCallback(response);
+   } catch (err) {
+     if (err.response.status === 401) {
+       setLoginFailed(true);
+     }
+   }
   }
 
   let content = (
@@ -232,6 +248,13 @@ function LandingPage(props) {
                 </li>
               </ul>
             </div>
+            {loginFailed ? (
+              <article class="message is-danger">
+                <div class="message-body">Login failed.</div>
+              </article>
+            ) : (
+              <div></div>
+            )}
             <div className="field">
               <label className="label">Username</label>
               <div className="control has-icons-left has-icons-right">

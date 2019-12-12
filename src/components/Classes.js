@@ -18,6 +18,7 @@ function Classes(props) {
       names.push(clss.name);
     })
     setClassNames(names);
+    console.log(classes);
     console.log(names);
   }, [classes]);
 
@@ -113,7 +114,7 @@ function Classes(props) {
           root={props.root}
           setEditing={setEditing}
           loadAllClassesCallback={loadUserClassesCallback}
-          loadAllClasses={props.loadAllClasses}
+          loadAllClasses={loadAllClassesCallback}
         />
       </React.Fragment>
     </div>
@@ -136,6 +137,7 @@ function Classes(props) {
           <a
             className={`${joined ? "is-active" : ""}`}
             onClick={() => {
+              setClassNames([])
               props.loadUserClasses(loadUserClassesCallback);
               setJoined(true);
             }}
@@ -145,6 +147,7 @@ function Classes(props) {
           <a
             className={`${joined ? "" : "is-active"}`}
             onClick={() => {
+              setClassNames([])
               props.loadAllClasses(loadAllClassesCallback);
               setJoined(false);
             }}

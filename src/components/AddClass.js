@@ -18,6 +18,7 @@ function AddClass(props) {
         data: { name: name }
       }
     });
+    console.log(response);
     if (callback) {
       callback(response);
     }
