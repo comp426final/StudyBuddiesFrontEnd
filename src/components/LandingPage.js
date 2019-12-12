@@ -204,7 +204,14 @@ function LandingPage(props) {
         </div>
       </section>
       <section className="section columns">
-        <div className="box column is-offset-one-third is-one-third">
+        <section className="section columns">
+            <div className="box column">
+              <figure class="image">
+                <img src="http://clipart-library.com/img1/867625.jpg"></img>
+              </figure>
+            </div>
+          </section>
+        <div className="box column is-offset-1 is-one-third">
           <div className="content is-primary">
             <h2 className="title has-text-centered">
               Welcome to Study Buddies!
@@ -391,8 +398,8 @@ function LandingPage(props) {
             </nav>
           )}
         </div>
-        <section className="section columns">
-          <div className="box">
+        <section className="section columns is-offset-1">
+          <div className="box column is-offset-1">
             <div className="content is-primary">
               <h2 className="title has-text-centered">
                 General Announcements!
